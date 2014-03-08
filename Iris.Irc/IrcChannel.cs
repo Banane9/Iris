@@ -5,10 +5,8 @@ using System.Text;
 
 namespace Iris.Irc
 {
-    public class User
+    public class IrcChannel
     {
-        public string Nickname { get; set; }
-
-        public string Username { get; set; }
+        public IrcChannelModes ChannelModes { get; private set; }
     }
 }

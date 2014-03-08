@@ -10,25 +10,25 @@ using System.Threading.Tasks;
 
 namespace Iris.Bouncer
 {
-    public class IrcConnection : IConnection
+    public sealed class IrcConnection : IIrcConnection
     {
         private CancellationTokenSource cancellationTokenSource;
         private StreamReader reader;
         private Stream stream;
         private StreamWriter writer;
 
-        public ConnectionConfig Config { get; private set; }
+        public IrcConnectionConfig Config { get; private set; }
 
-        public IrcConnection(ConnectionConfig config)
+        public IrcConnection(IrcConnectionConfig config)
         {
             Config = config;
         }
 
-        public event ConnectionClosedEventHandler ConnectionClosed;
+        public event IrcConnectionClosedEventHandler ConnectionClosed;
 
-        public event ConnectionClosingEventHandler ConnectionClosing;
+        public event IrcConnectionClosingEventHandler ConnectionClosing;
 
-        public event NewLineEventHandler NewLine;
+        public event NewIrcLineEventHandler NewLine;
 
         public void SendLine(string line)
         {

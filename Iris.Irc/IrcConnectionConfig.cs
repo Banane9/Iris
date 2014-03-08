@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Iris.Irc
 {
-    public class ConnectionConfig
+    public class IrcConnectionConfig
     {
         #region User
 
@@ -19,6 +19,6 @@ namespace Iris.Irc
 
         public uint ReconnectionAttempts { get; set; }
 
-        public Server Server { get; set; }
+        public IrcServer Server { get; set; }
     }
 }
