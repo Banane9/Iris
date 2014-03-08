@@ -39,6 +39,7 @@
     <Compile Include="IrcChannel.cs" />
     <Compile Include="IrcChannelModes.cs" />
     <Compile Include="IIrcConnection.cs" />
+    <Compile Include="IrcClientMessageTypes.cs" />
     <Compile Include="IrcConnectionConfig.cs" />
     <Compile Include="IrcNumericalMessageEventArgs.cs" />
     <Compile Include="IrcNumericalMessageTypes.cs" />

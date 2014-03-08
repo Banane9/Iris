@@ -29,16 +29,8 @@ namespace Iris.Irc
         Error_NoSuchChannel = 403,
 
         /// <summary>
-        /// Sent to a user who is either
-        /// <list type="bullet">
-        /// <item>
-        /// <description>Not on a channel which is mode +n or</description>
-        /// </item>
-        /// <item>
-        /// <description>not a chanop (or mode +v) on a channel which has mode +m set</description>
-        /// </item>
-        /// </list>
-        /// and is trying to send a PRIVMSG message to that channel.
+        /// Sent to a user who is either (a) Not on a channel which is mode +n or (b) not a chanop (or mode +v) on a channel
+        /// which has mode +m set and is trying to send a PRIVMSG message to that channel.
         /// <para>Format: "$channelName :Cannot send to channel"</para>
         /// </summary>
         Error_CanNotSendToChannel = 404,
