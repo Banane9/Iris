@@ -305,79 +305,412 @@ namespace Iris.Irc
         /// </summary>
         Error_UsersDontMatch = 502,
 
+        /// <summary>
+        /// Dummy reply number. Not used.
+        /// </summary>
         Reply_None = 300,
+
+        /// <summary>
+        ///Reply format used by USERHOST to list replies to the query list.
+        ///The reply string is composed as follows:
+        ///<para>Format: "$nick['*'] = (+|-)$hostname"</para>
+        ///The '*' indicates whether the client has registered as an Operator.
+        ///The '-' or '+' characters represent whether the client has set an
+        ///AWAY message or not respectively.
+        ///<para>Format: ":[$reply{'space'$reply...}]"</para>
+        /// </summary>
         Reply_UserHost = 302,
-        Reply_Ison = 303,
+
+        /// <summary>
+        /// Reply format used by ISON to list replies to the query list.
+        /// <para>Format: ":[$nick {'space'$nick...}]"</para>
+        /// </summary>
+        Reply_IsOn = 303,
+
+        /// <summary>
+        /// Sent to any client sending a PRIVMSG to a client which is away.
+        /// <para>Format: "$nick :$awayMessage"</para>
+        /// </summary>
         Reply_Away = 301,
+
+        /// <summary>
+        /// Sent when the client removes an AWAY message.
+        /// <para>Format: ":You are no longer marked as being away"</para>
+        /// </summary>
         Reply_Unaway = 305,
+
+        /// <summary>
+        /// Send when the client sets an AWAY message.
+        /// <para>Format: ":You have been marked as being away"</para>
+        /// </summary>
         Reply_NowAway = 306,
+
+        /// <summary>
+        /// Format: "$nick $user $host '*' :$realName"
+        /// </summary>
         Reply_WhoisUser = 311,
+
+        /// <summary>
+        /// Format: "$nick $server :$serverInfo"
+        /// </summary>
         Reply_WhoisServer = 312,
+
+        /// <summary>
+        /// Format: "$nick :is an IRC operator"
+        /// </summary>
         Reply_WhoisOperator = 313,
+
+        /// <summary>
+        /// Format: "$nick $integer :seconds idle"
+        /// </summary>
         Reply_WhoisIdle = 317,
+
+        /// <summary>
+        /// Marks the end of processing a WHOIS message.
+        /// <para>Format: "$nick :End of /WHOIS list"</para>
+        /// </summary>
         Reply_EndOfWhois = 318,
+
+        /// <summary>
+        /// May appear more than once in a WHOIS reply set. '@' and '+' characters next to the
+        /// channel name indicate whether a client is a channel operator or has been granted permission
+        /// to speak on a moderated channel.
+        /// <para>Format: "$nick :[{@|+}$channel'space'...]"</para>
+        /// </summary>
         Reply_WhoisChannels = 319,
+
+        /// <summary>
+        /// Format: "$nick $user $host '*' :$realName"
+        /// </summary>
         Reply_WhoWasUser = 314,
+
+        /// <summary>
+        /// Marks the end of a WHOWAS reply batch. Appears even if there was only one message being an error.
+        /// <para>Format: "$nick :End of WHOWAS"</para>
+        /// </summary>
         Reply_EndOfWhoWas = 369,
+
+        /// <summary>
+        /// Marks the start of the LIST command's reply batch.
+        /// <para>Format: Channel :Users'space''space'Name"</para>
+        /// </summary>
         Reply_ListStart = 321,
+
+        /// <summary>
+        /// Format: "$channel $visibleUsers :$topic"
+        /// </summary>
         Reply_List = 322,
+
+        /// <summary>
+        /// Marks the end of the LIST command's reply batch.
+        /// <para>Format: ":End of /LIST"</para>
+        /// </summary>
         Reply_ListEnd = 323,
+
+        /// <summary>
+        /// Format: "$channel $mode $modeParams"
+        /// </summary>
         Reply_ChannelModeIs = 324,
+
+        /// <summary>
+        /// Format: "$channel :No topic is set"
+        /// </summary>
         Reply_NoTopic = 331,
+
+        /// <summary>
+        /// Format: "$channel :$topic"
+        /// </summary>
         Reply_Topic = 332,
+
+        /// <summary>
+        /// Returned by the server to indicate that the attempted INVITE message
+        /// was successful and is being passed onto the end client.
+        /// <para>Format: "$channel $nick"</para>
+        /// </summary>
         Reply_Inviting = 341,
+
+        /// <summary>
+        /// Returned by a server answering a SUMMON message to indicate that it is summoning that user.
+        /// <para>Format: "$user :Summoning user to IRC"</para>
+        /// </summary>
         Reply_Summoning = 342,
+
+        /// <summary>
+        /// Reply by the server showing its version details.
+        /// The $version is the version of the software being used
+        /// (including any patchlevel revisions) and the $debuglevel
+        /// is used to indicate if the server is running in "debug mode".
+        /// <para>Format: "$version.$debuglevel $server :$comments"</para>
+        /// </summary>
         Reply_Version = 351,
+
+        /// <summary>
+        /// Reply to the WHO command. Only sent if there's an appropriate match to the request.
+        /// <para>Format: "$channel $user $host $server $nick (H|G)['*'][@|+] :$hopcount $realName"</para>
+        /// </summary>
         Reply_WhoReply = 352,
+
+        /// <summary>
+        /// Send after each WhoReply message.
+        /// <para>Format: "$name :End of /WHO list"</para>
+        /// </summary>
         Reply_EndOfWho = 315,
+
+        /// <summary>
+        /// Format: "= $channel :[[@|+]$nick'space'...]]"
+        /// </summary>
         Reply_NameReply = 353,
+
+        /// <summary>
+        /// Marks the end of the reply batch for the NAMES command.
+        /// <para>Format: "$channel :End of /NAMES list"</para>
+        /// </summary>
         Reply_EndOfNames = 366,
+
+        /// <summary>
+        /// Format: "$mask $server :$hopcount $serverInfo"
+        /// </summary>
         Reply_Links = 364,
+
+        /// <summary>
+        /// Marks the end of the reply batch from the LINKS command.
+        /// <para>Format: "$mask :End of /LINKS list"</para>
+        /// </summary>
         Reply_EndOfLinks = 365,
+
+        /// <summary>
+        /// Format: "$channel $banid"
+        /// </summary>
         Reply_Banlist = 367,
+
+        /// <summary>
+        /// Marks the end of the reply batch from the ban list command (MODE $channel b).
+        /// <para>Format: "$channel :End of channel ban list"</para>
+        /// </summary>
         Reply_EndOfBanlist = 368,
+
+        /// <summary>
+        /// Format: ":$string"
+        /// </summary>
         Reply_Info = 371,
+
+        /// <summary>
+        /// Marks the end of the INFO command's reply batch.
+        /// <para>Format: ":End of /INFO list"</para>
+        /// </summary>
         Reply_EndOfInfo = 374,
+
+        /// <summary>
+        /// Marks the start of the MOTD command's reply batch.
+        /// <para>Format: ":- $server Message of the day - "</para>
+        /// </summary>
         Reply_MotdStart = 375,
+
+        /// <summary>
+        /// Format: ":- $text"
+        /// </summary>
         Reply_Motd = 372,
+
+        /// <summary>
+        /// Marks the end of the MOTD command's reply batch.
+        /// <para>Format: ":End of /MOTD command"</para>
+        /// </summary>
         Reply_EndOfMotd = 376,
+
+        /// <summary>
+        /// Sent back to a client which has just successfully issued
+        /// an OPER message and gained operator status.
+        /// <para>Format: ":You are now an IRC operator"</para>
+        /// </summary>
         Reply_YoureOper = 381,
+
+        /// <summary>
+        /// Format: "$configFile :Rehashing"
+        /// </summary>
         Reply_Rehashing = 382,
+
+        /// <summary>
+        /// Format: "$server :$stringShowingServer'sLocalTime"
+        /// </summary>
         Reply_Time = 391,
+
+        /// <summary>
+        /// Marks the start of the USERS command's reply batch.
+        /// <para>Format: ":UserID'space''space''space'Terminal'space''space'Host"</para>
+        /// </summary>
         Reply_UsersStart = 392,
+
+        /// <summary>
+        /// Format: ":%-8s %-9s %-8s"
+        /// </summary>
         Reply_Users = 393,
+
+        /// <summary>
+        /// Marks the end of the USERS command's reply batch.
+        /// <para>Format: ":End of users"</para>
+        /// </summary>
         Reply_EndOfUsers = 394,
+
+        /// <summary>
+        /// Format: ":Nobody logged in"
+        /// </summary>
         Reply_NoUsers = 395,
+
+        /// <summary>
+        /// Format: "Link $versionAndDebugLevel $destination $nextServer"
+        /// </summary>
         Reply_TraceLink = 200,
+
+        /// <summary>
+        /// Format: "Try. $class $server"
+        /// </summary>
         Reply_TraceConnecting = 201,
+
+        /// <summary>
+        /// Format: "H.S. $class $server"
+        /// </summary>
         Reply_TraceHandshake = 202,
+
+        /// <summary>
+        /// Format: "???? $class [$clientIpAddressInDotForm]"
+        /// </summary>
         Reply_TraceUnknow = 203,
+
+        /// <summary>
+        /// Format: "Oper $class $nick"
+        /// </summary>
         Reply_TraceOperator = 204,
+
+        /// <summary>
+        /// Format: "User $class $nick"
+        /// </summary>
         Reply_TraceUser = 205,
+
+        /// <summary>
+        /// Format: "Serv $class $int'S' $int'C' $server ($nick!$user|*!*)@($host|$server)"
+        /// </summary>
         Reply_TraceServer = 206,
+
+        /// <summary>
+        /// Format: "$newtype 0 $clientName"
+        /// </summary>
         Reply_TraceNewType = 208,
+
+        /// <summary>
+        /// Format: "File $logfile $debugLevel"
+        /// </summary>
         Reply_TraceLog = 261,
+
+        /// <summary>
+        /// Format: "$linkname $sendq $sentMessages $sentBytes $receivedMessages $receivedBytes $timeOpen"
+        /// </summary>
         Reply_StatsLinkInfo = 211,
+
+        /// <summary>
+        /// Format: "$command $count"
+        /// </summary>
         Reply_StatsCommands = 212,
+
+        /// <summary>
+        /// Format: "C $host '*' $name $port $class"
+        /// </summary>
         Reply_StatsCLine = 213,
+
+        /// <summary>
+        /// Format: "N $host '*' $name $port $class"
+        /// </summary>
         Reply_StatsNLine = 214,
+
+        /// <summary>
+        /// Format: "I $host '*' $host $port $class"
+        /// </summary>
         Reply_StatsILine = 215,
+
+        /// <summary>
+        /// Format: "K $host '*' $username $port $class"
+        /// </summary>
         Reply_StatsKLine = 216,
+
+        /// <summary>
+        /// Format: "Y $class $pingFrequency $connectFrequency $maxSendq>"
+        /// </summary>
         Reply_StatsYLine = 218,
+
+        /// <summary>
+        /// Marks the end of that letter's STATS report.
+        /// <para>Format: "$statsLetter :End of /STATS report"</para>
+        /// </summary>
         Reply_EndOfStats = 219,
+
+        /// <summary>
+        /// Format: "L $hostmask '*' $servername maxdepth"
+        /// </summary>
         Reply_StatsLLine = 241,
+
+        /// <summary>
+        /// Format: ":Server Up %d days %d:%02d:%02d"
+        /// </summary>
         Reply_StatsUptime = 242,
+
+        /// <summary>
+        /// Format: "O $hostmask '*' $name"
+        /// </summary>
         Reply_StatsOLine = 243,
+
+        /// <summary>
+        /// Format: "H $hostmask '*' $servername"
+        /// </summary>
         Reply_StatsHLine = 244,
+
+        /// <summary>
+        /// The own user mode. (MODE $ownNick)
+        /// <para>Format: "$userModeString"</para>
+        /// </summary>
         Reply_UserModeIs = 221,
+
+        /// <summary>
+        /// ":There are $integer users and $integer invisible on $integer servers"
+        /// </summary>
         Reply_LUserClient = 251,
+
+        /// <summary>
+        /// Format: "$integer :operator(s) online"
+        /// </summary>
         Reply_LUserOperator = 252,
+
+        /// <summary>
+        /// Format: "$integer :unknown connection(s)"
+        /// </summary>
         Reply_LUserUnknown = 253,
+
+        /// <summary>
+        /// Format: "$integer :channels formed"
+        /// </summary>
         Reply_LUserChannels = 254,
+
+        /// <summary>
+        /// Format: ":I have $integer clients and $integer servers"
+        /// </summary>
         Reply_LUserMe = 255,
+
+        /// <summary>
+        /// Format: "$server :Administrative info"
+        /// </summary>
         Reply_AdminMe = 256,
+
+        /// <summary>
+        /// Format: ":$admin info"
+        /// </summary>
         Reply_AdminLoc1 = 257,
+
+        /// <summary>
+        /// Format: ":$admin info"
+        /// </summary>
         Reply_AdminLoc2 = 258,
+
+        /// <summary>
+        /// Format: ":$admin info"
+        /// </summary>
         Reply_AdminEMail = 259
     }
 }
