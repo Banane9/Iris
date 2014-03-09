@@ -6,7 +6,7 @@ using System.Text;
 namespace Iris.Irc
 {
     /// <summary>
-    /// Lists all the numerical message types, as described here: http://tools.ietf.org/html/rfc1459#section-6
+    /// Lists all the numerical message types, as described here: http://tools.ietf.org/html/rfc1459#section-6 and here: http://tools.ietf.org/html/rfc2812#section-5.1
     /// </summary>
     public enum IrcNumericalMessageTypes
     {
@@ -49,11 +49,20 @@ namespace Iris.Irc
         Error_WasNoSuchNick = 406,
 
         /// <summary>
-        /// Returned to a client which is attempting to send a PRIVMSG/NOTICE using the
-        /// user@host destination format and for a user@host which has several occurrences.
-        /// <para>Format: "$target :Duplicate recipients. No message delivered"</para>
+        /// Returned to a client which is attempting to send a PRIVMSG/NOTICE using
+        /// the user@host destination format and for a user@host which has several occurrences.
+        /// <para>Returned to a client which trying to send a PRIVMSG/NOTICE to too many recipients.</para>
+        /// <para>Returned to a client which is attempting to JOIN a safe channel using the
+        /// shortname when there are more than one such channel.</para>
+        /// <para>Format: "$target :$errorCode recipients. $abortMessage"</para>
         /// </summary>
         Error_TooManyTargets = 407,
+
+        /// <summary>
+        /// Returned to a client which is attempting to send a SQUERY to a service which does not exist.
+        /// <para>Format: "$serviceName :No such service"</para>
+        /// </summary>
+        Error_NoSuchService = 408,
 
         /// <summary>
         /// PING or PONG message missing the originator parameter which is
@@ -90,6 +99,11 @@ namespace Iris.Irc
         /// <para>Format: "$mask :Wildcard in toplevel domain"</para>
         /// </summary>
         Error_WildTopLevel = 414,
+
+        /// <summary>
+        /// Format: "$mask :Bad Server/host mask"
+        /// </summary>
+        Error_BadMask = 415,
 
         /// <summary>
         ///Returned to a registered client to indicate that the command sent is unknown by the server.
@@ -139,9 +153,18 @@ namespace Iris.Irc
         /// <summary>
         /// Returned by a server to a client when it detects a nickname collision
         /// (registered of a NICK that already exists by another server).
-        /// <para>Format: "$nick :Nickname collision KILL"</para>
+        /// <para>Format: "$nick :Nickname collision KILL from $user@$host"</para>
         /// </summary>
         Error_NickCollision = 436,
+
+        /// <summary>
+        /// Returned by a server to a user trying to join a channel
+        /// currently blocked by the channel delay mechanism.
+        /// <para>Returned by a server to a user trying to change nickname when the
+        /// desired nickname is blocked by the nick delay mechanism.</para>
+        /// <para>Format: "$(nick|channel) :Nick/channel is temporarily unavailable"</para>
+        /// </summary>
+        Error_UnavailableResource = 437,
 
         /// <summary>
         /// Returned by the server to indicate that the target
@@ -182,7 +205,7 @@ namespace Iris.Irc
         /// returned by any server which does not implement it.
         /// <para>Format: ":USERS has been disabled"</para>
         /// </summary>
-        Error_UserDisabled = 446,
+        Error_UsersDisabled = 446,
 
         /// <summary>
         /// Returned by the server to indicate that the client must be
@@ -227,6 +250,11 @@ namespace Iris.Irc
         Error_YoureBannedCreep = 465,
 
         /// <summary>
+        /// Sent by a server to a user to inform that access to the server will soon be denied.
+        /// </summary>
+        Error_YouWillBeBanned = 466,
+
+        /// <summary>
         /// Format: "$channel :Channel key already set"
         /// </summary>
         Error_KeySet = 467,
@@ -237,7 +265,7 @@ namespace Iris.Irc
         Error_ChannelIsFull = 471,
 
         /// <summary>
-        /// Format: "$char :is unknown mode char to me"
+        /// Format: "$char :is unknown mode char to me for $channel"
         /// </summary>
         Error_UnknowMode = 472,
 
@@ -255,6 +283,21 @@ namespace Iris.Irc
         /// Format: "$channel :Cannot join channel (+k)"
         /// </summary>
         Error_BadChannelKey = 475,
+
+        /// <summary>
+        /// Format: "$channel :Bad Channel Mask"
+        /// </summary>
+        Error_BadChannelMask = 476,
+
+        /// <summary>
+        /// Format: "$channel :Channel doesn't support modes"
+        /// </summary>
+        Error_NoChannelModes = 477,
+
+        /// <summary>
+        /// Format: "$channel $char :Channel list is full"
+        /// </summary>
+        Error_BanlistFull = 478,
 
         /// <summary>
         /// Any command requiring operator privileges to operate returns
@@ -278,6 +321,20 @@ namespace Iris.Irc
         Error_CantKillServer = 483,
 
         /// <summary>
+        /// Sent by the server to a user upon connection to indicate
+        /// the restricted nature of the connection (user mode "+r").
+        /// <para>Format: ":Your connection is restricted!"</para>
+        /// </summary>
+        Error_Restricted = 484,
+
+        /// <summary>
+        /// Any MODE requiring "channel creator" privileges MUST return this error
+        /// if the client making the attempt is not a chanop on the specified channel.
+        /// <para>Format: ":You're not the original channel operator"</para>
+        /// </summary>
+        Error_UniqOpPrivilegesNeeded = 485,
+
+        /// <summary>
         /// If a client sends an OPER message and the server has not been configured to allow
         /// connections from the client's host as an operator, this error is returned.
         /// <para>Format: ":No O-lines for your host"</para>
@@ -296,6 +353,33 @@ namespace Iris.Irc
         /// <para>Format: ":Cant change mode for other users"</para>
         /// </summary>
         Error_UsersDontMatch = 502,
+
+        /// <summary>
+        /// Format: ":Welcome to the Internet Relay Network $nick!$user@$host"
+        /// </summary>
+        Reply_Welcome = 001,
+
+        /// <summary>
+        /// Format: "Your host is $servername, running version $ver"
+        /// </summary>
+        Reply_YourHost = 002,
+
+        /// <summary>
+        /// Format: "This server was created $date"
+        /// </summary>
+        Reply_Created = 003,
+
+        /// <summary>
+        /// Format: "$servername $version $availableUserModes $availableChannelModes"
+        /// </summary>
+        Reply_MyInfo = 004,
+
+        /// <summary>
+        /// Sent by the server to a user to suggest an alternative server.
+        /// This is often used when the connection is refused because the server is already full.
+        /// <para>Format: "Try server $serverName, port $portNumber"</para>
+        /// </summary>
+        Reply_Bounce = 005,
 
         /// <summary>
         /// Dummy reply number. Not used.
@@ -400,6 +484,11 @@ namespace Iris.Irc
         Reply_ListEnd = 323,
 
         /// <summary>
+        /// Format: "$channel $nickname"
+        /// </summary>
+        Reply_UniqOpIs = 325,
+
+        /// <summary>
         /// Format: "$channel $mode $modeParams"
         /// </summary>
         Reply_ChannelModeIs = 324,
@@ -428,6 +517,28 @@ namespace Iris.Irc
         Reply_Summoning = 342,
 
         /// <summary>
+        /// Format: "$channel $invitemask"
+        /// </summary>
+        Reply_Invitelist = 346,
+
+        /// <summary>
+        /// Marks the end of the invitations list for a channel.
+        /// <para>Format: "$channel :End of channel invite list"</para>
+        /// </summary>
+        Reply_EndOfInvitelist = 347,
+
+        /// <summary>
+        /// Format: "$channel $exceptionmask"
+        /// </summary>
+        Reply_Exceptlist = 348,
+
+        /// <summary>
+        /// Marks the end of the exception list for a channel.
+        /// <para>Format: "$channel :End of channel exception list"</para>
+        /// </summary>
+        Reply_EndOfExceptlist = 349,
+
+        /// <summary>
         /// Reply by the server showing its version details.
         /// The $version is the version of the software being used
         /// (including any patchlevel revisions) and the $debuglevel
@@ -449,7 +560,8 @@ namespace Iris.Irc
         Reply_EndOfWho = 315,
 
         /// <summary>
-        /// Format: "= $channel :[[@|+]$nick'space'...]]"
+        /// @ for secret channels; '*' for private channels and = for others (public channels).
+        /// <para>Format: "(=|'*'|@) $channel :[[@|+]$nick'space'...]]"</para>
         /// </summary>
         Reply_NameReply = 353,
 
@@ -522,6 +634,12 @@ namespace Iris.Irc
         Reply_Rehashing = 382,
 
         /// <summary>
+        /// Sent by the server to a service upon successful registration.
+        /// <para>Format: ":You are service $servicename"</para>
+        /// </summary>
+        Reply_YoureService = 383,
+
+        /// <summary>
         /// Format: "$server :$stringShowingServer'sLocalTime"
         /// </summary>
         Reply_Time = 391,
@@ -584,9 +702,24 @@ namespace Iris.Irc
         Reply_TraceServer = 206,
 
         /// <summary>
+        /// Format: "Service $class $name $type $activeType"
+        /// </summary>
+        Reply_TraceService = 207,
+
+        /// <summary>
         /// Format: "$newtype 0 $clientName"
         /// </summary>
         Reply_TraceNewType = 208,
+
+        /// <summary>
+        /// Format: "Class $class $count"
+        /// </summary>
+        Reply_TraceClass = 209,
+
+        /// <summary>
+        /// Unused.
+        /// </summary>
+        Reply_TraceReconnect = 210,
 
         /// <summary>
         /// Format: "File $logfile $debugLevel"
@@ -594,12 +727,13 @@ namespace Iris.Irc
         Reply_TraceLog = 261,
 
         /// <summary>
-        /// Format: "$linkname $sendq $sentMessages $sentBytes $receivedMessages $receivedBytes $timeOpen"
+        /// Format: "$linkname $sendq $sentMessages $sentKBytes $receivedMessages $receivedKBytes $timeOpen"
         /// </summary>
         Reply_StatsLinkInfo = 211,
 
         /// <summary>
-        /// Format: "$command $count"
+        /// Reports statistics on commands usage.
+        /// <para>Format: "$command $count $byteCount $remoteCount"</para>
         /// </summary>
         Reply_StatsCommands = 212,
 
@@ -661,6 +795,17 @@ namespace Iris.Irc
         Reply_UserModeIs = 221,
 
         /// <summary>
+        /// Format: "$name $server $mask $type $hopcount $info"
+        /// </summary>
+        Reply_Servicelist = 234,
+
+        /// <summary>
+        /// Marks the end of the SERVLIST command's reply batch.
+        /// <para>Format: "$mask $type :End of service listing"</para>
+        /// </summary>
+        Reply_ServicelistEnd = 235,
+
+        /// <summary>
         /// ":There are $integer users and $integer invisible on $integer servers"
         /// </summary>
         Reply_LUserClient = 251,
@@ -703,6 +848,13 @@ namespace Iris.Irc
         /// <summary>
         /// Format: ":$admin info"
         /// </summary>
-        Reply_AdminEMail = 259
+        Reply_AdminEMail = 259,
+
+        /// <summary>
+        /// When a server drops a command without processing it, it MUST
+        /// use the reply RPL_TRYAGAIN to inform the originating client.
+        /// <para>Format: "$command :Please wait a while and try again."</para>
+        /// </summary>
+        Reply_TryAgain = 263
     }
 }
