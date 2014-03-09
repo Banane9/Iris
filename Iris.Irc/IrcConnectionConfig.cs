@@ -13,6 +13,8 @@ namespace Iris.Irc
 
         public string Password { get; set; }
 
+        public IrcUserModes UserMode { get; set; }
+
         public string Username { get; set; }
 
         #endregion User

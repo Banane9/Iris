@@ -8,19 +8,13 @@ using System.Threading.Tasks;
 
 namespace Iris.Irc
 {
-    public delegate void IrcConnectionClosedEventHandler(IIrcConnection sender);
-
-    public delegate void IrcConnectionClosingEventHandler(IIrcConnection sender);
-
-    public delegate void NewIrcLineEventHandler(IIrcConnection sender, string line);
-
     public interface IIrcConnection
     {
-        event IrcConnectionClosedEventHandler ConnectionClosed;
+        event EventHandler ConnectionClosed;
 
-        event IrcConnectionClosingEventHandler ConnectionClosing;
+        event EventHandler ConnectionClosing;
 
-        event NewIrcLineEventHandler NewLine;
+        event EventHandler<IrcLineEventArgs> NewLine;
 
         void SendLine(string line);
 

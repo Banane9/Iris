@@ -24,11 +24,18 @@ namespace Iris.Bouncer
             Config = config;
         }
 
-        public event IrcConnectionClosedEventHandler ConnectionClosed;
+        ~IrcConnection()
+        {
+            reader.Dispose();
+            writer.Dispose();
+            stream.Dispose();
+        }
 
-        public event IrcConnectionClosingEventHandler ConnectionClosing;
+        public event EventHandler ConnectionClosed;
 
-        public event NewIrcLineEventHandler NewLine;
+        public event EventHandler ConnectionClosing;
+
+        public event EventHandler<IrcLineEventArgs> NewLine;
 
         public void SendLine(string line)
         {
@@ -42,6 +49,8 @@ namespace Iris.Bouncer
 
             Task.Factory.StartNew(() =>
                 {
+                    reconnect();
+
                     while (!cancellationTokenSource.Token.IsCancellationRequested)
                     {
                         try
@@ -50,7 +59,7 @@ namespace Iris.Bouncer
 
                             if (!String.IsNullOrEmpty(line))
                             {
-                                if (NewLine != null) NewLine(this, line);
+                                OnNewLine(line);
                             }
                         }
                         catch (IOException)
@@ -68,10 +77,25 @@ namespace Iris.Bouncer
 
         public void Stop()
         {
-            if (ConnectionClosing != null) ConnectionClosing(this);
+            OnConnectionClosing();
             cancellationTokenSource.Cancel();
             stream.Close();
-            if (ConnectionClosed != null) ConnectionClosed(this);
+            OnConnectionClosed();
+        }
+
+        protected void OnConnectionClosed()
+        {
+            if (ConnectionClosed != null) ConnectionClosed(this, EventArgs.Empty);
+        }
+
+        protected void OnConnectionClosing()
+        {
+            if (ConnectionClosing != null) ConnectionClosing(this, EventArgs.Empty);
+        }
+
+        protected void OnNewLine(string line)
+        {
+            if (NewLine != null) NewLine(this, new IrcLineEventArgs { Line = line });
         }
 
         private bool connect()
@@ -89,7 +113,7 @@ namespace Iris.Bouncer
 
             SendLine("PASS " + Config.Password);
             SendLine("NICK " + Config.Nickname);
-            SendLine("USER " + Config.Nickname + "something something:" + Config.Username);
+            SendLine("USER " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
 
             return true;
         }

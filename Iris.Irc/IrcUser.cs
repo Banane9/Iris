@@ -7,6 +7,8 @@ namespace Iris.Irc
 {
     public class IrcUser
     {
+        public string Host { get; set; }
+
         public string Nickname { get; set; }
 
         public string Username { get; set; }
