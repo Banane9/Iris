@@ -38,12 +38,14 @@
   <ItemGroup>
     <Compile Include="IrcChannel.cs" />
     <Compile Include="IrcChannelModes.cs" />
-    <Compile Include="IIrcConnection.cs" />
+    <Compile Include="IConnection.cs" />
     <Compile Include="IrcClientMessageTypes.cs" />
     <Compile Include="IrcConnectionConfig.cs" />
-    <Compile Include="IrcNumericalMessageEventArgs.cs" />
-    <Compile Include="IrcNumericalMessageTypes.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="IrcMessageEventArgs.cs" />
+    <Compile Include="NumericalMessageTypes.cs" />
     <Compile Include="IrcServer.cs" />
+    <Compile Include="IrcUserModes.cs" />
     <Compile Include="Testing\FakeIrcConnection.cs" />
     <Compile Include="IrcUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

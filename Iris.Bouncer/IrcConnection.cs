@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Iris.Bouncer
 {
-    public sealed class IrcConnection : IIrcConnection
+    public sealed class IrcConnection : IConnection
     {
         private CancellationTokenSource cancellationTokenSource;
         private StreamReader reader;
@@ -43,7 +43,7 @@ namespace Iris.Bouncer
             writer.FlushAsync();
         }
 
-        public void Start()
+        public void Open()
         {
             cancellationTokenSource = new CancellationTokenSource();
 
@@ -68,14 +68,14 @@ namespace Iris.Bouncer
 
                             if (!reconnected)
                             {
-                                Stop();
+                                Close();
                             }
                         }
                     }
                 });
         }
 
-        public void Stop()
+        public void Close()
         {
             OnConnectionClosing();
             cancellationTokenSource.Cancel();

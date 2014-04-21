@@ -8,7 +8,7 @@ namespace Iris.Irc
     /// <summary>
     /// Lists all the numerical message types, as described here: http://tools.ietf.org/html/rfc1459#section-6 and here: http://tools.ietf.org/html/rfc2812#section-5.1
     /// </summary>
-    public enum IrcNumericalMessageTypes
+    public enum NumericalMessageTypes
     {
         /// <summary>
         /// Used to indicate the nickname parameter supplied to a command is currently unused.

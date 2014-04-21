@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Iris.Irc.Testing
 {
-    public class FakeIrcConnection : IIrcConnection
+    public class FakeIrcConnection : IConnection
     {
         public Action<string> sendLineFunction { get; set; }
 
@@ -28,20 +28,20 @@ namespace Iris.Irc.Testing
             this.sendLineFunction = sendLineFunction;
         }
 
-        public event IrcConnectionClosedEventHandler ConnectionClosed;
+        public event EventHandler ConnectionClosed;
 
-        public event IrcConnectionClosingEventHandler ConnectionClosing;
+        public event EventHandler ConnectionClosing;
 
-        public event NewIrcLineEventHandler NewLine;
+        public event EventHandler<IrcLineEventArgs> NewLine;
 
         public void SendConnectionClosedEvent()
         {
-            if (ConnectionClosed != null) ConnectionClosed(this);
+            if (ConnectionClosed != null) ConnectionClosed(this, EventArgs.Empty);
         }
 
         public void SendConnectionClosingEvent()
         {
-            if (ConnectionClosing != null) ConnectionClosing(this);
+            if (ConnectionClosing != null) ConnectionClosing(this, EventArgs.Empty);
         }
 
         public void SendLine(string line)
@@ -51,15 +51,15 @@ namespace Iris.Irc.Testing
 
         public void SendNewLineEvent(string line)
         {
-            if (NewLine != null) NewLine(this, line);
+            if (NewLine != null) NewLine(this, new IrcLineEventArgs { Line = line });
         }
 
-        public void Start()
+        public void Open()
         {
             startFunction();
         }
 
-        public void Stop()
+        public void Close()
         {
             stopFunction();
         }

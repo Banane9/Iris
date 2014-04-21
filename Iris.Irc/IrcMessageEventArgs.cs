@@ -26,7 +26,7 @@ namespace Iris.Irc
 
         public string? Message { get; set; }
 
-        public IrcNumericalMessageTypes MessageType { get; set; }
+        public NumericalMessageTypes MessageType { get; set; }
 
         public string Recipient { get; set; }
 
