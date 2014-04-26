@@ -35,7 +35,7 @@ namespace Iris.Bouncer
 
         public event EventHandler ConnectionClosing;
 
-        public event EventHandler<IrcLineEventArgs> NewLine;
+        public event NewLineEventHandler NewLine;
 
         public void SendLine(string line)
         {
@@ -95,7 +95,7 @@ namespace Iris.Bouncer
 
         protected void OnNewLine(string line)
         {
-            if (NewLine != null) NewLine(this, new IrcLineEventArgs { Line = line });
+            if (NewLine != null) NewLine(this, line);
         }
 
         private bool connect()

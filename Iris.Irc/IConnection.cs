@@ -10,9 +10,7 @@ namespace Iris.Irc
 {
     public interface IConnection
     {
-        event EventHandler ConnectionClosed;
-
-        event EventHandler<IrcLineEventArgs> NewLine;
+        event NewLineEventHandler NewLine;
 
         void SendLine(string line);
 
@@ -20,4 +18,6 @@ namespace Iris.Irc
 
         void Close();
     }
+
+    public delegate void NewLineEventHandler(IConnection sender, string line);
 }

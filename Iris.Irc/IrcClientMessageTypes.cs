@@ -20,7 +20,7 @@ namespace Iris.Irc
         public const string Kill = "KILL";
         public const string Links = "LINKS";
         public const string List = "LIST";
-        public const string Lusers = "LUSERS";
+        public const string ListUsers = "LUSERS";
         public const string MessageOfTheDay = "MOTD";
         public const string Mode = "MODE";
         public const string Names = "NAMES";

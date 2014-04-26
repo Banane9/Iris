@@ -32,7 +32,7 @@ namespace Iris.Irc.Testing
 
         public event EventHandler ConnectionClosing;
 
-        public event EventHandler<IrcLineEventArgs> NewLine;
+        public event NewLineEventHandler NewLine;
 
         public void SendConnectionClosedEvent()
         {
@@ -51,7 +51,7 @@ namespace Iris.Irc.Testing
 
         public void SendNewLineEvent(string line)
         {
-            if (NewLine != null) NewLine(this, new IrcLineEventArgs { Line = line });
+            if (NewLine != null) NewLine(this, line);
         }
 
         public void Open()
