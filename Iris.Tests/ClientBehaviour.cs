@@ -30,7 +30,7 @@ namespace Iris.Tests
         {
             connection = new FakeConnection(line => clientLines.Enqueue(line));
             client = new Client(connection, new ConnectionConfig() { Nickname = nickname, Username = username, UserMode = usermode, Password = password });
-            client.Line += (sender, line) => serverLines.Enqueue(line);
+            client.Message += (sender, message) => serverLines.Enqueue(message.Line);
 
             clientThread = new Thread((ParameterizedThreadStart)((object delay) => client.Run((Action)delay)));
             clientThread.IsBackground = true;

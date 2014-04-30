@@ -15,7 +15,7 @@ namespace Iris.Irc.ServerMessages
             get { return MessageTypes.None; }
         }
 
-        public virtual bool IsCorrectFormat(string line)
+        public static bool IsCorrectFormat(string line)
         {
             return !string.IsNullOrWhiteSpace(line);
         }

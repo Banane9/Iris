@@ -17,7 +17,7 @@ namespace Iris.Irc.ServerMessages
             get { return MessageTypes.String; }
         }
 
-        public override bool IsCorrectFormat(string line)
+        public static new bool IsCorrectFormat(string line)
         {
             string[] split = line.Split(' ');
 

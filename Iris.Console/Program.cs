@@ -16,7 +16,7 @@ namespace Iris.ConsoleTesting
         {
             IrcConnection ircConnection = new IrcConnection(new Irc.ServerDetails() { Port = 6667, Address = "irc.esper.net", Name = "Esper.net" });
             Client client = new Client(ircConnection, new ConnectionConfig() { Nickname = "Iris", Password = "", UserMode = 0, Username = "Iris" });
-            client.Line += (sender, line) => Console.WriteLine(line);
+            client.Message += (sender, line) => Console.WriteLine(line);
 
             Thread clientThread = new Thread((ParameterizedThreadStart)((object delay) => client.Run((Action)delay)));
             clientThread.Name = "Cient - Esper.net";
