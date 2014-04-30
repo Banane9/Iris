@@ -25,7 +25,7 @@ namespace Iris.Irc.Messages
             if (split.Length < 3)
                 throw new FormatException("Not enough parts in message.");
 
-            if (split[1].ToUpper() != IrcClientMessageTypes.Join)
+            if (split[1].ToUpper() != ClientMessageTypes.Join)
                 throw new FormatException("Not a JOIN message.");
 
             Nick = split[0].Remove(0, 1);

@@ -36,13 +36,13 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IrcChannel.cs" />
-    <Compile Include="IrcChannelModes.cs" />
+    <Compile Include="Channel.cs" />
+    <Compile Include="ChannelModes.cs" />
     <Compile Include="IConnection.cs" />
-    <Compile Include="IrcClientMessageTypes.cs" />
-    <Compile Include="IrcConnectionConfig.cs" />
+    <Compile Include="ClientMessageTypes.cs" />
+    <Compile Include="ConnectionConfig.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="IrcMessageEventArgs.cs" />
+    <Compile Include="MessageEventArgs.cs" />
     <Compile Include="Messages\JoinMessage.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\MessageTypes.cs" />
@@ -50,13 +50,13 @@
     <Compile Include="Messages\Notice.cs" />
     <Compile Include="Messages\NumericalMessage.cs" />
     <Compile Include="NumericalMessageTypes.cs" />
-    <Compile Include="IrcServer.cs" />
-    <Compile Include="IrcUserModes.cs" />
+    <Compile Include="ServerDetails.cs" />
+    <Compile Include="UserModes.cs" />
     <Compile Include="Messages\PrivateMessage.cs" />
     <Compile Include="Messages\PartMessage.cs" />
     <Compile Include="Messages\QuitMessage.cs" />
-    <Compile Include="Testing\FakeIrcConnection.cs" />
-    <Compile Include="IrcUser.cs" />
+    <Compile Include="Testing\FakeConnection.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Iris.Irc
 {
-    public class IrcChannel
+    public class Channel
     {
-        public IrcChannelModes ChannelModes { get; private set; }
+        public ChannelModes ChannelModes { get; private set; }
     }
 }

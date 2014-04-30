@@ -10,14 +10,16 @@ namespace Iris.Irc
 {
     public interface IConnection
     {
-        event NewLineEventHandler NewLine;
+        bool TryGetNextLine(out string line);
 
         void SendLine(string line);
 
-        void Open();
+        bool Start();
 
-        void Close();
+        void Stop();
+
+        event ConnectionDroppedUnexpectedlyEventHandler ConnectionDroppedUnexpectedly;
     }
 
-    public delegate void NewLineEventHandler(IConnection sender, string line);
+    public delegate void ConnectionDroppedUnexpectedlyEventHandler(IConnection sender, Exception ex);
 }

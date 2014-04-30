@@ -1,5 +1,6 @@
 ﻿using Iris.Irc;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,99 +11,71 @@ using System.Threading.Tasks;
 
 namespace Iris.Bouncer
 {
-    public sealed class IrcConnection : IConnection
+    public sealed class IrcConnection : IConnection, IDisposable
     {
         private CancellationTokenSource cancellationTokenSource;
         private StreamReader reader;
         private Stream stream;
         private StreamWriter writer;
+        private ConcurrentQueue<string> lineQueue = new ConcurrentQueue<string>();
 
-        public IrcConnectionConfig Config { get; private set; }
+        public ServerDetails Server { get; set; }
 
-        public IrcConnection(IrcConnectionConfig config)
+        public IrcConnection(ServerDetails server)
         {
-            Config = config;
+            Server = server;
         }
-
-        ~IrcConnection()
-        {
-            reader.Dispose();
-            writer.Dispose();
-            stream.Dispose();
-        }
-
-        public event EventHandler ConnectionClosed;
-
-        public event EventHandler ConnectionClosing;
-
-        public event NewLineEventHandler NewLine;
 
         public void SendLine(string line)
         {
             writer.WriteLine(line);
-            writer.FlushAsync();
+            writer.Flush();
         }
 
-        public void Open()
+        public bool Start()
         {
+            bool connected = connect();
+
+            if (!connected) return false;
+
             cancellationTokenSource = new CancellationTokenSource();
 
             Task.Factory.StartNew(() =>
                 {
-                    reconnect();
-
+                    //Essentially while(true) since it will almost certainly be in the ReadLine() when the cancelation is requested.
                     while (!cancellationTokenSource.Token.IsCancellationRequested)
                     {
                         try
                         {
                             string line = reader.ReadLine();
 
-                            if (!String.IsNullOrEmpty(line))
+                            if (!String.IsNullOrWhiteSpace(line))
                             {
-                                OnNewLine(line);
+                                lineQueue.Enqueue(line);
                             }
                         }
-                        catch (IOException)
+                        catch (Exception ex)
                         {
-                            bool reconnected = reconnect();
-
-                            if (!reconnected)
-                            {
-                                Close();
-                            }
+                            if (!cancellationTokenSource.Token.IsCancellationRequested)
+                                onConnectionDroppedUnexpectedly(ex);
                         }
                     }
                 });
+
+            return true;
         }
 
-        public void Close()
+        public void Stop()
         {
-            OnConnectionClosing();
             cancellationTokenSource.Cancel();
             stream.Close();
-            OnConnectionClosed();
-        }
-
-        protected void OnConnectionClosed()
-        {
-            if (ConnectionClosed != null) ConnectionClosed(this, EventArgs.Empty);
-        }
-
-        protected void OnConnectionClosing()
-        {
-            if (ConnectionClosing != null) ConnectionClosing(this, EventArgs.Empty);
-        }
-
-        protected void OnNewLine(string line)
-        {
-            if (NewLine != null) NewLine(this, line);
         }
 
         private bool connect()
         {
             try
             {
-                stream = new TcpClient(Config.Server.Address, (int)Config.Server.Port).GetStream();
+                stream = new TcpClient(Server.Address, (int)Server.Port).GetStream();
                 reader = new StreamReader(stream);
                 writer = new StreamWriter(stream);
             }
@@ -111,26 +84,27 @@ namespace Iris.Bouncer
                 return false;
             }
 
-            SendLine("PASS " + Config.Password);
-            SendLine("NICK " + Config.Nickname);
-            SendLine("USER " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
-
             return true;
         }
 
-        private bool reconnect()
+        public void Dispose()
         {
-            uint reconnectionAttempts = 0;
-            bool reconnected = false;
-
-            while (reconnectionAttempts < Config.ReconnectionAttempts)
-            {
-                reconnected = connect();
-                if (reconnected) break;
-                reconnectionAttempts++;
-            }
-
-            return reconnected;
+            reader.Dispose();
+            writer.Dispose();
+            stream.Dispose();
         }
+
+        public bool TryGetNextLine(out string line)
+        {
+            return lineQueue.TryDequeue(out line);
+        }
+
+        private void onConnectionDroppedUnexpectedly(Exception ex)
+        {
+            if (ConnectionDroppedUnexpectedly != null)
+                ConnectionDroppedUnexpectedly(this, ex);
+        }
+
+        public event ConnectionDroppedUnexpectedlyEventHandler ConnectionDroppedUnexpectedly;
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 namespace Iris.Irc
 {
     [Flags]
-    public enum IrcChannelModes
+    public enum ChannelModes
     {
         None = 0,
 

@@ -26,7 +26,7 @@ namespace Iris.Irc.Messages
             if (split.Length < 4)
                 throw new FormatException("Not enough parts in message.");
 
-            if (split[1].ToUpper() != IrcClientMessageTypes.PrivateMessage)
+            if (split[1].ToUpper() != ClientMessageTypes.PrivateMessage)
                 throw new FormatException("Not a PRIVMSG message..");
 
             Nick = split[0].Remove(0, 1);

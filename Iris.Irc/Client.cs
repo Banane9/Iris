@@ -11,9 +11,25 @@ namespace Iris.Irc
     {
         private IConnection connection;
 
-        public Client(IConnection connection)
+        public ConnectionConfig Config { get; set; }
+
+        public Client(IConnection connection, ConnectionConfig config)
         {
             this.connection = connection;
+            Config = config;
+        }
+
+        public bool Start()
+        {
+            bool started = connection.Start();
+
+            if (!started) return false;
+
+            connection.SendLine("PASS " + Config.Password);
+            connection.SendLine("NICK " + Config.Nickname);
+            connection.SendLine("USER " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
+
+            return true;
         }
 
         public delegate void NoticeEventHandler(Client sender, Notice notice);

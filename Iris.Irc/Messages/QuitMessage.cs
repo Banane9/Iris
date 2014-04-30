@@ -24,7 +24,7 @@ namespace Iris.Irc.Messages
             if (split.Length < 3)
                 throw new FormatException("Not enough parts in message.");
 
-            if (split[1].ToUpper() != IrcClientMessageTypes.Quit)
+            if (split[1].ToUpper() != ClientMessageTypes.Quit)
                 throw new FormatException("Not a QUIT message.");
 
             Nick = split[0].Remove(0, 1);

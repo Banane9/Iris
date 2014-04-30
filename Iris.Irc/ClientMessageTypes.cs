@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Iris.Irc
 {
-    public static class IrcClientMessageTypes
+    public static class ClientMessageTypes
     {
         public const string Admin = "ADMIN";
         public const string Away = "AWAY";

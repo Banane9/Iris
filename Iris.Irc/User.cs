@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Iris.Irc
 {
-    public class IrcUser
+    public class User
     {
         public string Host { get; set; }
 

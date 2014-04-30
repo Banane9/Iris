@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Iris.Irc
 {
     [Flags]
-    public enum IrcUserModes
+    public enum UserModes
     {
         /// <summary>
         /// None
