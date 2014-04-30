@@ -1,6 +1,6 @@
 ﻿using Iris.Bouncer;
 using Iris.Irc;
-using Iris.Irc.Messages;
+using Iris.Irc.ServerMessages;
 using System;
 using System.Collections.Generic;
 using System.Linq;

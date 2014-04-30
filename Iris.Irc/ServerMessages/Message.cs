@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Iris.Irc.Messages
+namespace Iris.Irc.ServerMessages
 {
     public class Message
     {
@@ -15,6 +15,11 @@ namespace Iris.Irc.Messages
             get { return MessageTypes.None; }
         }
 
+        public virtual bool IsCorrectFormat(string line)
+        {
+            return !string.IsNullOrWhiteSpace(line);
+        }
+
         public override string ToString()
         {
             return Line;
@@ -22,6 +27,9 @@ namespace Iris.Irc.Messages
 
         public Message(string line)
         {
+            if (string.IsNullOrWhiteSpace(line))
+                throw new FormatException("Line must contain something other than whitespace and not be null.");
+
             Line = line;
         }
     }

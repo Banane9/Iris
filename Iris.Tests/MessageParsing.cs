@@ -1,4 +1,4 @@
-﻿using Iris.Irc.Messages;
+﻿using Iris.Irc.ServerMessages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -13,7 +13,7 @@ namespace Iris.Tests
             PrivateMessage privateMessage = new PrivateMessage(":Banane9 PRIVMSG #banane9 :Hello, channel!");
 
             Assert.AreEqual<MessageTypes>(MessageTypes.Private, privateMessage.Type);
-            Assert.AreEqual<string>("Banane9", privateMessage.Nick);
+            Assert.AreEqual<string>("Banane9", privateMessage.User);
             Assert.AreEqual<string>("#banane9", privateMessage.Recipient);
             Assert.AreEqual<string>("Hello, channel!", privateMessage.Message);
         }
@@ -24,7 +24,7 @@ namespace Iris.Tests
             Notice notice = new Notice(":Banane9 NOTICE #banane9 :Notice to channel!");
 
             Assert.AreEqual<MessageTypes>(MessageTypes.Notice, notice.Type);
-            Assert.AreEqual<string>("Banane9", notice.Nick);
+            Assert.AreEqual<string>("Banane9", notice.User);
             Assert.AreEqual<string>("#banane9", notice.Recipient);
             Assert.AreEqual<string>("Notice to channel!", notice.Message);
         }
@@ -45,7 +45,7 @@ namespace Iris.Tests
             JoinMessage joinMessage = new JoinMessage(":Banane9 JOIN #banane9");
 
             Assert.AreEqual<MessageTypes>(MessageTypes.Join, joinMessage.Type);
-            Assert.AreEqual<string>("Banane9", joinMessage.Nick);
+            Assert.AreEqual<string>("Banane9", joinMessage.User);
             Assert.AreEqual<string>("#banane9", joinMessage.Channel);
         }
 
@@ -55,7 +55,7 @@ namespace Iris.Tests
             PartMessage partMessage = new PartMessage(":Banane9 PART #banane9");
 
             Assert.AreEqual<MessageTypes>(MessageTypes.Part, partMessage.Type);
-            Assert.AreEqual<string>("Banane9", partMessage.Nick);
+            Assert.AreEqual<string>("Banane9", partMessage.User);
             Assert.AreEqual<string>("#banane9", partMessage.Channel);
         }
 
@@ -65,7 +65,7 @@ namespace Iris.Tests
             QuitMessage quitMessage = new QuitMessage(":Banane9 QUIT :Bye cruel world!");
 
             Assert.AreEqual<MessageTypes>(MessageTypes.Quit, quitMessage.Type);
-            Assert.AreEqual<string>("Banane9", quitMessage.Nick);
+            Assert.AreEqual<string>("Banane9", quitMessage.User);
             Assert.AreEqual<string>("Bye cruel world!", quitMessage.Message);
         }
 

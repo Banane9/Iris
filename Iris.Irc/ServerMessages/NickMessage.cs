@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Iris.Irc.Messages
+namespace Iris.Irc.ServerMessages
 {
     public class NickMessage : Message
     {
@@ -13,7 +13,14 @@ namespace Iris.Irc.Messages
 
         public override MessageTypes Type
         {
-            get { return MessageTypes.Nick; }
+            get { return MessageTypes.String; }
+        }
+
+        public override bool IsCorrectFormat(string line)
+        {
+            string[] split = line.Split(' ');
+
+            return split.Length > 3 && split[1].ToUpper() == ServerStringMessageTypes.Nickname;
         }
 
         public NickMessage(string line)
@@ -24,7 +31,7 @@ namespace Iris.Irc.Messages
             if (split.Length < 3)
                 throw new FormatException("Not enough parts in message.");
 
-            if (split[1].ToUpper() != ClientMessageTypes.Nickname)
+            if (split[1].ToUpper() != ServerStringMessageTypes.Nickname)
                 throw new FormatException("Not a NICK message.");
 
             OldNick = split[0].Remove(0, 1);

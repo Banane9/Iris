@@ -1,4 +1,4 @@
-﻿using Iris.Irc.Messages;
+﻿using Iris.Irc.ServerMessages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +27,9 @@ namespace Iris.Irc
 
             if (!running) return;
 
-            connection.SendLine(ClientMessageTypes.Password + " " + Config.Password);
-            connection.SendLine(ClientMessageTypes.Nickname + " " + Config.Nickname);
-            connection.SendLine(ClientMessageTypes.User + " " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
+            connection.SendLine(ClientStringMessageTypes.Password + " " + Config.Password);
+            connection.SendLine(ClientStringMessageTypes.Nickname + " " + Config.Nickname);
+            connection.SendLine(ClientStringMessageTypes.User + " " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
 
             string line;
             while (running)
@@ -43,7 +43,7 @@ namespace Iris.Irc
                     delay();
             }
 
-            connection.SendLine("QUIT");
+            connection.SendLine("QUIT"); //Add configurable message
             connection.Close();
         }
 

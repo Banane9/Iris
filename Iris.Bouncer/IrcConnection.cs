@@ -13,7 +13,6 @@ namespace Iris.Bouncer
 {
     public sealed class IrcConnection : IConnection, IDisposable
     {
-        private CancellationTokenSource cancellationTokenSource;
         private StreamReader reader;
         private Stream stream;
         private StreamWriter writer;

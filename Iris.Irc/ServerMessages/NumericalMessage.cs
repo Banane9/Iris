@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Iris.Irc.Messages
+namespace Iris.Irc.ServerMessages
 {
     public class NumericalMessage : Message
     {
@@ -12,6 +12,16 @@ namespace Iris.Irc.Messages
         public override MessageTypes Type
         {
             get { return MessageTypes.Numerical; }
+        }
+
+        public override bool IsCorrectFormat(string line)
+        {
+            string[] split = line.Split();
+
+            if (split.Length < 2) return false;
+
+            NumericalMessageTypes _;
+            return Enum.TryParse<NumericalMessageTypes>(split[1], out _);
         }
 
         public NumericalMessage(string line)

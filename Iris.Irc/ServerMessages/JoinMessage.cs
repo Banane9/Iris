@@ -4,17 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Iris.Irc.Messages
+namespace Iris.Irc.ServerMessages
 {
     public class JoinMessage : Message
     {
-        public string Nick { get; private set; }
+        public string User { get; private set; }
 
         public string Channel { get; private set; }
 
         public override MessageTypes Type
         {
-            get { return MessageTypes.Join; }
+            get { return MessageTypes.String; }
+        }
+
+        public override bool IsCorrectFormat(string line)
+        {
+            string[] split = line.Split(' ');
+
+            return split.Length > 3 && split[1].ToUpper() == ServerStringMessageTypes.Join;
         }
 
         public JoinMessage(string line)
@@ -25,10 +32,10 @@ namespace Iris.Irc.Messages
             if (split.Length < 3)
                 throw new FormatException("Not enough parts in message.");
 
-            if (split[1].ToUpper() != ClientMessageTypes.Join)
+            if (split[1].ToUpper() != ServerStringMessageTypes.Join)
                 throw new FormatException("Not a JOIN message.");
 
-            Nick = split[0].Remove(0, 1);
+            User = split[0].Remove(0, 1);
             Channel = split[2];
         }
     }

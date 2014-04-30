@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Iris.Irc
 {
-    public static class ClientMessageTypes
+    public static class ClientStringMessageTypes
     {
         public const string Admin = "ADMIN";
         public const string Away = "AWAY";
@@ -31,7 +31,7 @@ namespace Iris.Irc
         public const string Password = "PASS";
         public const string Ping = "PING";
         public const string Pong = "PONG";
-        public const string PrivateMessage = "PRIVMSG";
+        public const string Private = "PRIVMSG";
         public const string Quit = "QUIT";
         public const string Rehash = "REHASH";
         public const string Restart = "RESTART";
