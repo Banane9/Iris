@@ -12,6 +12,11 @@ namespace Iris.Irc.Testing
 
         public Action<string> SendLineFunction { get; set; }
 
+        public bool HasMoreLines
+        {
+            get { return LineQueue.Count > 0; }
+        }
+
         public FakeConnection()
         {
             SendLineFunction = (line) => { };
@@ -29,13 +34,13 @@ namespace Iris.Irc.Testing
             SendLineFunction(line);
         }
 
-        public bool Start()
+        public bool Open()
         {
             //Just dummy.
             return true;
         }
 
-        public void Stop()
+        public void Close()
         {
             //Just dummy.
         }

@@ -48,6 +48,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Iris.Bouncer\Iris.Bouncer.csproj">
+      <Project>{56e2cb37-1e90-494d-ab7d-802f39cea67e}</Project>
+      <Name>Iris.Bouncer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Iris.Irc\Iris.Irc.csproj">
       <Project>{43f31c87-7e52-4aa2-84c0-68b61c751f91}</Project>
       <Name>Iris.Irc</Name>

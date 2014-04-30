@@ -17,7 +17,13 @@ namespace Iris.Bouncer
         private StreamReader reader;
         private Stream stream;
         private StreamWriter writer;
+        private Thread connectionThread;
         private ConcurrentQueue<string> lineQueue = new ConcurrentQueue<string>();
+
+        public bool HasMoreLines
+        {
+            get { return !lineQueue.IsEmpty; }
+        }
 
         public ServerDetails Server { get; set; }
 
@@ -32,18 +38,15 @@ namespace Iris.Bouncer
             writer.Flush();
         }
 
-        public bool Start()
+        public bool Open()
         {
             bool connected = connect();
 
             if (!connected) return false;
 
-            cancellationTokenSource = new CancellationTokenSource();
-
-            Task.Factory.StartNew(() =>
+            connectionThread = new Thread(() =>
                 {
-                    //Essentially while(true) since it will almost certainly be in the ReadLine() when the cancelation is requested.
-                    while (!cancellationTokenSource.Token.IsCancellationRequested)
+                    while (true)
                     {
                         try
                         {
@@ -51,23 +54,34 @@ namespace Iris.Bouncer
 
                             if (!String.IsNullOrWhiteSpace(line))
                             {
-                                lineQueue.Enqueue(line);
+                                //What does the client care about pings. Also the're might be too long of a delay due to backlog from message processing.
+                                if (line.ToUpper().StartsWith("PING"))
+                                {
+                                    SendLine("PONG" + line.Remove(0, 4));
+                                }
+                                else
+                                {
+                                    lineQueue.Enqueue(line);
+                                }
                             }
                         }
+                        catch (ThreadAbortException) { } //If the thread gets aborted, it's not unexpected.
                         catch (Exception ex)
                         {
-                            if (!cancellationTokenSource.Token.IsCancellationRequested)
-                                onConnectionDroppedUnexpectedly(ex);
+                            onConnectionDroppedUnexpectedly(ex);
                         }
                     }
                 });
+            connectionThread.Name = "Connection - " + Server.Name;
+            connectionThread.IsBackground = true;
+            connectionThread.Start();
 
             return true;
         }
 
-        public void Stop()
+        public void Close()
         {
-            cancellationTokenSource.Cancel();
+            connectionThread.Abort();
             stream.Close();
         }
 

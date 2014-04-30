@@ -12,11 +12,13 @@ namespace Iris.Irc
     {
         bool TryGetNextLine(out string line);
 
+        bool HasMoreLines { get; }
+
         void SendLine(string line);
 
-        bool Start();
+        bool Open();
 
-        void Stop();
+        void Close();
 
         event ConnectionDroppedUnexpectedlyEventHandler ConnectionDroppedUnexpectedly;
     }

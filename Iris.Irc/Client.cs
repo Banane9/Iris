@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Iris.Irc
@@ -10,6 +11,7 @@ namespace Iris.Irc
     public sealed class Client
     {
         private IConnection connection;
+        private bool running;
 
         public ConnectionConfig Config { get; set; }
 
@@ -19,18 +21,40 @@ namespace Iris.Irc
             Config = config;
         }
 
-        public bool Start()
+        public void Run(Action delay)
         {
-            bool started = connection.Start();
+            running = connection.Open();
 
-            if (!started) return false;
+            if (!running) return;
 
             connection.SendLine("PASS " + Config.Password);
             connection.SendLine("NICK " + Config.Nickname);
             connection.SendLine("USER " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
 
-            return true;
+            string line;
+            while (running)
+            {
+                if (connection.TryGetNextLine(out line))
+                {
+                    Line(this, line);
+                }
+
+                if (!connection.HasMoreLines)
+                    delay();
+            }
+
+            connection.SendLine("QUIT");
+            connection.Close();
         }
+
+        public void Stop()
+        {
+            running = false;
+        }
+
+        public delegate void LineEventHandler(Client sender, string line);
+
+        public event LineEventHandler Line;
 
         public delegate void NoticeEventHandler(Client sender, Notice notice);
 
