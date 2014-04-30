@@ -9,6 +9,8 @@ namespace Iris.Irc.ServerMessages
     {
         public NumericalMessageTypes NumericalType { get; private set; }
 
+        public string Server { get; private set; }
+
         public override MessageTypes Type
         {
             get { return MessageTypes.Numerical; }
@@ -44,6 +46,8 @@ namespace Iris.Irc.ServerMessages
             {
                 throw new FormatException("Not a valid number for a numerical message.", ex);
             }
+
+            Server = split[0].Remove(0, 1);
         }
     }
 }

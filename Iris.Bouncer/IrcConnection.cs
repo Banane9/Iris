@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Iris.Bouncer
 {
+    /// <summary>
+    /// Implementation of the <see cref="Iris.Irc.IConnection"/> interface for desktop applications.
+    /// </summary>
     public sealed class IrcConnection : IConnection, IDisposable
     {
         private StreamReader reader;
@@ -84,6 +87,10 @@ namespace Iris.Bouncer
             stream.Close();
         }
 
+        /// <summary>
+        /// Trys to connect to the server.
+        /// </summary>
+        /// <returns>Whether it was successful or not.</returns>
         private bool connect()
         {
             try
@@ -112,6 +119,10 @@ namespace Iris.Bouncer
             return lineQueue.TryDequeue(out line);
         }
 
+        /// <summary>
+        /// Fires the ConnectionDroppedUnexpectedly event.
+        /// </summary>
+        /// <param name="ex">Exception caused by the drop.</param>
         private void onConnectionDroppedUnexpectedly(Exception ex)
         {
             if (ConnectionDroppedUnexpectedly != null)

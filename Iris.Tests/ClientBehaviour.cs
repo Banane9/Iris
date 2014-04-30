@@ -37,31 +37,11 @@ namespace Iris.Tests
             clientThread.Start((Action)(() => Thread.Sleep(100)));
         }
 
-        #region Zusätzliche Testattribute
-
-        //
-        // Sie können beim Schreiben der Tests folgende zusätzliche Attribute verwenden:
-        //
-        // Verwenden Sie ClassInitialize, um vor Ausführung des ersten Tests in der Klasse Code auszuführen.
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Verwenden Sie ClassCleanup, um nach Ausführung aller Tests in einer Klasse Code auszuführen.
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Mit TestInitialize können Sie vor jedem einzelnen Test Code ausführen.
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        //Mit TestCleanup können Sie nach jedem einzelnen Test Code ausführen.
         [TestCleanup()]
         public void MyTestCleanup()
         {
             client.Stop();
         }
-
-        #endregion Zusätzliche Testattribute
 
         [TestMethod]
         public void Login()

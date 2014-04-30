@@ -8,19 +8,39 @@ using System.Threading.Tasks;
 
 namespace Iris.Irc
 {
+    /// <summary>
+    /// The client that takes an <see cref="Iris.Irc.IConnection"/> and splits up the incoming messages.
+    /// </summary>
     public class Client
     {
+        /// <summary>
+        /// Connection to the server.
+        /// </summary>
         private IConnection connection;
+
+        /// <summary>
+        /// Whether the client is supposed to be running or not.
+        /// </summary>
         private bool running;
 
         public ConnectionConfig Config { get; set; }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="Iris.Irc.Client"/> class.
+        /// </summary>
+        /// <param name="connection">Connection to the IRC Server.</param>
+        /// <param name="config"></param>
         public Client(IConnection connection, ConnectionConfig config)
         {
             this.connection = connection;
             Config = config;
         }
 
+        /// <summary>
+        /// Run the client. Should be started in its own <see cref="System.Threading.Thread"/>.
+        /// Delay function has to be passed in because the Portable Class Library doesn't support the Thread class.
+        /// </summary>
+        /// <param name="delay">Function that gets called to let the Thread sleep when there's no new lines to process.</param>
         public void Run(Action delay)
         {
             running = connection.Open();
@@ -47,11 +67,18 @@ namespace Iris.Irc
             connection.Close();
         }
 
+        /// <summary>
+        /// Stops the client.
+        /// </summary>
         public void Stop()
         {
             running = false;
         }
 
+        /// <summary>
+        /// Dispatches the right events for the line.
+        /// </summary>
+        /// <param name="line">The line.</param>
         private void dispatchEventsFor(string line)
         {
             if (ServerMessages.Message.IsCorrectFormat(line))
@@ -92,8 +119,15 @@ namespace Iris.Irc
 
         public delegate void MessageEventHandler(Client sender, Message message);
 
+        /// <summary>
+        /// Fires for any message.
+        /// </summary>
         public event MessageEventHandler Message;
 
+        /// <summary>
+        /// Fires the Message event.
+        /// </summary>
+        /// <param name="message">The message.</param>
         protected void onMessage(Message message)
         {
             if (Message != null)
@@ -102,8 +136,15 @@ namespace Iris.Irc
 
         public delegate void NoticeEventHandler(Client sender, Notice notice);
 
+        /// <summary>
+        /// Fires for NOTICEs.
+        /// </summary>
         public event NoticeEventHandler Notice;
 
+        /// <summary>
+        /// Fires the Notice event.
+        /// </summary>
+        /// <param name="notice">The notice.</param>
         protected void onNotice(Notice notice)
         {
             if (Notice != null)
@@ -112,8 +153,15 @@ namespace Iris.Irc
 
         public delegate void NumericalMessageEventHandler(Client sender, NumericalMessage numericalMessage);
 
+        /// <summary>
+        /// Fires for numerical messages.
+        /// </summary>
         public event NumericalMessageEventHandler NumericalMessage;
 
+        /// <summary>
+        /// Fires the NumericalMessage event.
+        /// </summary>
+        /// <param name="numericalMessage">The numerical message.</param>
         protected void onNumericalMessage(NumericalMessage numericalMessage)
         {
             if (NumericalMessage != null)
@@ -122,8 +170,15 @@ namespace Iris.Irc
 
         public delegate void PrivateMessageEventHandler(Client sender, PrivateMessage privateMessage);
 
+        /// <summary>
+        /// Fires for PRIVMSGs.
+        /// </summary>
         public event PrivateMessageEventHandler PrivateMessage;
 
+        /// <summary>
+        /// Fires the PrivateMessage event.
+        /// </summary>
+        /// <param name="privateMessage">The private message.</param>
         protected void onPrivateMessage(PrivateMessage privateMessage)
         {
             if (PrivateMessage != null)
@@ -132,8 +187,15 @@ namespace Iris.Irc
 
         public delegate void NickMessageEventHandler(Client sender, NickMessage nickMessage);
 
+        /// <summary>
+        /// Fires for NICKs.
+        /// </summary>
         public event NickMessageEventHandler NickMessage;
 
+        /// <summary>
+        /// Fires the NickMessage event.
+        /// </summary>
+        /// <param name="nickMessage">The nick message.</param>
         protected void onNickMessage(NickMessage nickMessage)
         {
             if (NickMessage != null)
@@ -142,8 +204,15 @@ namespace Iris.Irc
 
         public delegate void JoinMessageEventHandler(Client sender, JoinMessage joinMessage);
 
+        /// <summary>
+        /// Fires for JOINs.
+        /// </summary>
         public event JoinMessageEventHandler JoinMessage;
 
+        /// <summary>
+        /// Fires the JoinMessage event.
+        /// </summary>
+        /// <param name="joinMessage">The join message.</param>
         protected void onJoinMessage(JoinMessage joinMessage)
         {
             if (JoinMessage != null)
@@ -152,8 +221,15 @@ namespace Iris.Irc
 
         public delegate void PartMessageEventHandler(Client sender, PartMessage partMessage);
 
+        /// <summary>
+        /// Fires for PARTs.
+        /// </summary>
         public event PartMessageEventHandler PartMessage;
 
+        /// <summary>
+        /// Fires the PartMessage event.
+        /// </summary>
+        /// <param name="partMessage">The part message.</param>
         protected void onPartMessage(PartMessage partMessage)
         {
             if (PartMessage != null)
@@ -162,8 +238,15 @@ namespace Iris.Irc
 
         public delegate void QuitMessageEventHandler(Client sender, QuitMessage quitMessage);
 
+        /// <summary>
+        /// Fires for QUITs.
+        /// </summary>
         public event QuitMessageEventHandler QuitMessage;
 
+        /// <summary>
+        /// Fires the QuitMessage event.
+        /// </summary>
+        /// <param name="quitMessage">The quit message.</param>
         protected void onQuitMessage(QuitMessage quitMessage)
         {
             if (QuitMessage != null)
