@@ -26,6 +26,11 @@ namespace Iris.Irc
         bool HasMoreLines { get; }
 
         /// <summary>
+        /// Gets whether the connection is alive.
+        /// </summary>
+        bool IsAlive { get; }
+
+        /// <summary>
         /// Send a line through the connection.
         /// </summary>
         /// <param name="line">The line.</param>
