@@ -27,9 +27,9 @@ namespace Iris.Irc
 
             if (!running) return;
 
-            connection.SendLine("PASS " + Config.Password);
-            connection.SendLine("NICK " + Config.Nickname);
-            connection.SendLine("USER " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
+            connection.SendLine(ClientMessageTypes.Password + " " + Config.Password);
+            connection.SendLine(ClientMessageTypes.Nickname + " " + Config.Nickname);
+            connection.SendLine(ClientMessageTypes.User + " " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
 
             string line;
             while (running)
