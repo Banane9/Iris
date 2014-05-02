@@ -34,19 +34,11 @@ namespace Iris.Irc.ServerMessages
             if (split.Length < 2)
                 throw new FormatException("Not enough parts in message.");
 
-            int number;
-            if (!int.TryParse(split[1], out number))
-                throw new FormatException("Not a numerical message.");
+            NumericalMessageTypes numericalType;
+            if (!Enum.TryParse<NumericalMessageTypes>(split[1], out numericalType))
+                throw new FormatException("Not a valid number for a numerical message.");
 
-            try
-            {
-                NumericalType = (NumericalMessageTypes)number;
-            }
-            catch (Exception ex)
-            {
-                throw new FormatException("Not a valid number for a numerical message.", ex);
-            }
-
+            NumericalType = numericalType;
             Server = split[0].Remove(0, 1);
         }
     }

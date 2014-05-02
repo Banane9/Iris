@@ -22,7 +22,7 @@ namespace Iris.Irc.ServerMessages
         {
             string[] split = line.Split(' ');
 
-            return split.Length > 4 && split[1].ToUpper() == ServerStringMessageTypes.Notice;
+            return split.Length > 3 && split[1].ToUpper() == ServerStringMessageTypes.Notice;
         }
 
         public Notice(string line)

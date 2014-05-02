@@ -23,14 +23,14 @@ namespace Iris.Irc
         /// </summary>
         private bool running;
 
-        public ConnectionConfig Config { get; set; }
+        public ClientConfig Config { get; set; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="Iris.Irc.Client"/> class.
         /// </summary>
         /// <param name="connection">Connection to the IRC Server.</param>
         /// <param name="config"></param>
-        public Client(IConnection connection, ConnectionConfig config)
+        public Client(IConnection connection, ClientConfig config)
         {
             this.connection = connection;
             Config = config;

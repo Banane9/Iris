@@ -14,12 +14,12 @@ namespace Iris.ConsoleTesting
     {
         private static void Main(string[] args)
         {
-            IrcConnection ircConnection = new IrcConnection(new Irc.ServerDetails() { Port = 6667, Address = "irc.esper.net", Name = "Esper.net" });
-            Client client = new Client(ircConnection, new ConnectionConfig() { Nickname = "Iris", Password = "whatever", UserMode = 0, Username = "Iris" });
+            IrcConnection ircConnection = new IrcConnection(new ServerDetails() { Port = 6667, Address = "irc.esper.net", Name = "Esper.net" });
+            Client client = new Client(ircConnection, new ClientConfig() { Nickname = "Iris", Password = "whatever", UserMode = 0, Username = "Iris" });
             client.Message += (sender, line) => Console.WriteLine(line);
 
             Thread clientThread = new Thread((ParameterizedThreadStart)((object delay) => client.Run((Action)delay)));
-            clientThread.Name = "Cient - Esper.net";
+            clientThread.Name = "Client - Esper.net";
             clientThread.IsBackground = true;
             clientThread.Start((Action)(() => Thread.Sleep(100))); //Needs the delay action passed in because Portable Class Libraries don't support Threads ...
 

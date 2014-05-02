@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Iris.Irc
 {
-    public class ConnectionConfig
+    public class ClientConfig
     {
         #region User
 
@@ -20,7 +20,5 @@ namespace Iris.Irc
         #endregion User
 
         public uint ReconnectionAttempts { get; set; }
-
-        public ServerDetails Server { get; set; }
     }
 }

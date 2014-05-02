@@ -34,15 +34,15 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Folder Include="ClientMessages\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Channel.cs" />
     <Compile Include="ChannelModes.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="ClientStringMessageTypes.cs" />
-    <Compile Include="ConnectionConfig.cs" />
+    <Compile Include="ClientConfig.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="MessageEventArgs.cs" />
     <Compile Include="ServerMessages\JoinMessage.cs" />
     <Compile Include="ServerMessages\Message.cs" />
     <Compile Include="MessageTypes.cs" />

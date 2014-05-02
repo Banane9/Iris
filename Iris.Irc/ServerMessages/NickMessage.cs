@@ -20,7 +20,7 @@ namespace Iris.Irc.ServerMessages
         {
             string[] split = line.Split(' ');
 
-            return split.Length > 3 && split[1].ToUpper() == ServerStringMessageTypes.Nickname;
+            return split.Length > 2 && split[1].ToUpper() == ServerStringMessageTypes.Nickname;
         }
 
         public NickMessage(string line)
