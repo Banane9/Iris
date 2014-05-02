@@ -100,5 +100,45 @@ namespace Iris.Tests
             Assert.AreEqual<string>("Server", numericalMessage.Server);
             Assert.AreEqual<NumericalMessageTypes>(NumericalMessageTypes.Error_NoSuchNick, numericalMessage.NumericalType);
         }
+
+        [TestMethod]
+        public void User()
+        {
+            string complete = "Banane9!banane9@host.com";
+            User user = new User(complete);
+
+            Assert.AreEqual<string>(complete, user.Complete);
+            Assert.AreEqual<string>("Banane9", user.Nickname);
+            Assert.AreEqual<string>("banane9", user.Username);
+            Assert.AreEqual<string>("host.com", user.Host);
+            Assert.IsTrue(user.HasIdent);
+        }
+
+        [TestMethod]
+        public void UserNicknameChange()
+        {
+            string complete = "Banane9!banane9@host.com";
+            User user = new User(complete);
+            user.Nickname = "Banane9|Other";
+
+            Assert.AreNotEqual<string>(complete, user.Complete);
+            Assert.AreEqual<string>("Banane9|Other", user.Nickname);
+            Assert.AreEqual<string>("banane9", user.Username);
+            Assert.AreEqual<string>("host.com", user.Host);
+            Assert.IsTrue(user.HasIdent);
+        }
+
+        [TestMethod]
+        public void Channel()
+        {
+            Channel globalChannel = new Channel("#global");
+            Channel localChannel = new Channel("&local");
+
+            Assert.IsTrue(globalChannel.IsGlobal);
+            Assert.IsFalse(globalChannel.IsLocal);
+
+            Assert.IsFalse(localChannel.IsGlobal);
+            Assert.IsTrue(localChannel.IsLocal);
+        }
     }
 }

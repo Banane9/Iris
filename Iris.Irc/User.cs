@@ -5,12 +5,86 @@ using System.Text;
 
 namespace Iris.Irc
 {
+    /// <summary>
+    /// Represents an IRC User.
+    /// </summary>
     public class User
     {
-        public string Host { get; set; }
+        /// <summary>
+        /// Gets the Host of the User. nickname!username@host
+        /// </summary>
+        public string Host
+        {
+            get
+            {
+                return Complete.Remove(0, Complete.IndexOf('@') + 1);
+            }
+        }
 
-        public string Nickname { get; set; }
+        /// <summary>
+        /// Gets or sets the nickname of the User. nickname!username@host
+        /// </summary>
+        public string Nickname
+        {
+            get
+            {
+                return Complete.Remove(Complete.IndexOf('!'));
+            }
+            set
+            {
+                Complete = value + Complete.Remove(0, Complete.IndexOf('!'));
+            }
+        }
 
-        public string Username { get; set; }
+        /// <summary>
+        /// Gets the username of the User. nickname!username@host
+        /// </summary>
+        public string Username
+        {
+            get
+            {
+                return Complete.Remove(Complete.IndexOf('@')).Remove(0, Complete.IndexOf('!') + 1);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the complete identifier of the User. identifier = nickname!username@host
+        /// </summary>
+        public string Complete { get; set; }
+
+        /// <summary>
+        /// Gets whether the user has an ident.
+        /// </summary>
+        public bool HasIdent
+        {
+            get
+            {
+                return !Complete.Contains("!~");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the User is online currently.
+        /// </summary>
+        public bool IsOnline { get; set; }
+
+        public bool IsNickServIdentified { get; set; }
+
+        /// <summary>
+        /// Gets or sets the modes that the user has.
+        /// </summary>
+        public UserModes Modes { get; set; }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="Iris.Irc.User"/> class with the given complete identifier.
+        /// </summary>
+        /// <param name="complete">The complete identifier. nickname!username@host</param>
+        public User(string complete, bool isOnline = true, bool isNickServIdentified = false, UserModes userModes = 0)
+        {
+            Complete = complete;
+            IsOnline = isOnline;
+            IsNickServIdentified = isNickServIdentified;
+            Modes = userModes;
+        }
     }
 }

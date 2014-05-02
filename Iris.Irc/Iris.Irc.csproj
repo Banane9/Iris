@@ -39,10 +39,13 @@
   <ItemGroup>
     <Compile Include="Channel.cs" />
     <Compile Include="ChannelModes.cs" />
+    <Compile Include="ClientStateTracker.cs" />
+    <Compile Include="IChat.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="ClientStringMessageTypes.cs" />
     <Compile Include="ClientConfig.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="PrivateMessage.cs" />
     <Compile Include="ServerMessages\JoinMessage.cs" />
     <Compile Include="ServerMessages\Message.cs" />
     <Compile Include="MessageTypes.cs" />
