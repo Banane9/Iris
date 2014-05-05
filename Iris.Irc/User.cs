@@ -59,7 +59,7 @@ namespace Iris.Irc
         {
             get
             {
-                return !Complete.Contains("!~");
+                return !Complete.Contains("!~") && Complete.Contains("!");
             }
         }
 
@@ -68,6 +68,9 @@ namespace Iris.Irc
         /// </summary>
         public bool IsOnline { get; set; }
 
+        /// <summary>
+        /// Gets or sets wheter the User is identified with NickServ.
+        /// </summary>
         public bool IsNickServIdentified { get; set; }
 
         /// <summary>
@@ -81,6 +84,9 @@ namespace Iris.Irc
         /// <param name="complete">The complete identifier. nickname!username@host</param>
         public User(string complete, bool isOnline = true, bool isNickServIdentified = false, UserModes userModes = 0)
         {
+            if (!(complete.Contains("!") && complete.Contains("@")))
+                throw new FormatException("Complete identifier doesn't have the correct format of nickname!username@host.");
+
             Complete = complete;
             IsOnline = isOnline;
             IsNickServIdentified = isNickServIdentified;

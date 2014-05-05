@@ -28,7 +28,7 @@ namespace Iris.Irc
         {
             get
             {
-                return Name.StartsWith("&");
+                return Name.StartsWith(LocalChannelPrefix.ToString());
             }
         }
 
@@ -39,7 +39,7 @@ namespace Iris.Irc
         {
             get
             {
-                return Name.StartsWith("#");
+                return Name.StartsWith(GlobalChannelPrefix.ToString());
             }
         }
 
@@ -59,8 +59,8 @@ namespace Iris.Irc
         /// <param name="name">The channel's name.</param>
         public Channel(string name, ChannelModes channelModes = 0)
         {
-            if (!(name.StartsWith("&") || name.StartsWith("#")))
-                throw new FormatException("Channel must start with '&' (local) or '#' (network wide).");
+            if (!(name.StartsWith(LocalChannelPrefix.ToString()) || name.StartsWith(GlobalChannelPrefix.ToString())))
+                throw new FormatException("Channel must start with '" + LocalChannelPrefix + "' (local) or '" + GlobalChannelPrefix + "' (network wide).");
 
             Name = name;
             ChannelModes = channelModes;
@@ -68,5 +68,8 @@ namespace Iris.Irc
             Messages = new List<Message>();
             Users = new List<User>();
         }
+
+        public const char LocalChannelPrefix = '&';
+        public const char GlobalChannelPrefix = '#';
     }
 }
