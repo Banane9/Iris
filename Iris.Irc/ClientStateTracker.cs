@@ -31,31 +31,31 @@ namespace Iris.Irc
             this.client.QuitMessage += client_QuitMessage;
         }
 
-        private virtual void client_Message(Client sender, Message message)
+        private void client_Message(Client sender, Message message)
         {
         }
 
-        private virtual void client_PrivateMessage(Client sender, PrivateMessage privateMessage)
+        private void client_PrivateMessage(Client sender, PrivateMessage privateMessage)
         {
         }
 
-        private virtual void client_Notice(Client sender, Notice notice)
+        private void client_Notice(Client sender, Notice notice)
         {
         }
 
-        private virtual void client_NickMessage(Client sender, NickMessage nickMessage)
+        private void client_NickMessage(Client sender, NickMessage nickMessage)
         {
         }
 
-        private virtual void client_JoinMessage(Client sender, JoinMessage joinMessage)
+        private void client_JoinMessage(Client sender, JoinMessage joinMessage)
         {
         }
 
-        private virtual void client_PartMessage(Client sender, PartMessage partMessage)
+        private void client_PartMessage(Client sender, PartMessage partMessage)
         {
         }
 
-        private virtual void client_QuitMessage(Client sender, QuitMessage quitMessage)
+        private void client_QuitMessage(Client sender, QuitMessage quitMessage)
         {
         }
     }
