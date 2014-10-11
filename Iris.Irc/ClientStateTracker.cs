@@ -1,4 +1,5 @@
-﻿using Iris.Irc.Messages.Server;
+﻿using Iris.Irc.Messages;
+using Iris.Irc.Messages.Server;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

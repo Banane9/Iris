@@ -107,7 +107,7 @@ namespace Iris.Irc
         public void RequestNickServAuthentication(Client client)
         {
             NickServIdentificationRequested = DateTime.Now;
-            client.SendLine(ClientStringMessageType.Private + " NickServ :ACC " + Nickname);
+            client.SendLine(Messages.Client.NamedMessageType.Private + " NickServ :ACC " + Nickname);
         }
     }
 }

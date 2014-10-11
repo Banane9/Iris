@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Iris.Irc
+namespace Iris.Irc.Messages.Client
 {
-    public static class ClientStringMessageType
+    public static class NamedMessageType
     {
         public const string Admin = "ADMIN";
         public const string Away = "AWAY";

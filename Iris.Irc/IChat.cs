@@ -1,4 +1,4 @@
-﻿using Iris.Irc.Messages.Server;
+﻿using Iris.Irc.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;

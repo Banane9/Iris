@@ -1,4 +1,5 @@
-﻿using Iris.Irc.Messages.Server;
+﻿using Iris.Irc.Messages;
+using Iris.Irc.Messages.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +45,9 @@ namespace Iris.Irc
 
             if (!running) return;
 
-            connection.SendLine(ClientStringMessageType.Password + " " + Config.Password);
-            connection.SendLine(ClientStringMessageType.Nickname + " " + Config.Nickname);
-            connection.SendLine(ClientStringMessageType.User + " " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
+            connection.SendLine(Messages.Client.NamedMessageType.Password + " " + Config.Password);
+            connection.SendLine(Messages.Client.NamedMessageType.Nickname + " " + Config.Nickname);
+            connection.SendLine(Messages.Client.NamedMessageType.User + " " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
 
             string line;
             while (running)
@@ -167,7 +168,7 @@ namespace Iris.Irc
         /// <param name="line">The line.</param>
         private void dispatchEventsFor(string line)
         {
-            if (Messages.Server.Message.IsCorrectFormat(line))
+            if (Messages.Message.IsCorrectFormat(line))
             {
                 //Tryed to order them by how often they appear.
                 if (Messages.Server.PrivateMessage.IsCorrectFormat(line))

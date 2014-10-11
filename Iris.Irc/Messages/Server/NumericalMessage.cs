@@ -4,12 +4,25 @@ using System.Linq;
 
 namespace Iris.Irc.Messages.Server
 {
+    /// <summary>
+    /// Represents a numerical message that a Client receives from the Server.
+    /// </summary>
     public class NumericalMessage : Message
     {
+        /// <summary>
+        /// Gets the numerical type of the Message.
+        /// </summary>
         public NumericalMessageType NumericalType { get; private set; }
 
+        /// <summary>
+        /// Gets the identifier/address of the Server sending the Message.
+        /// </summary>
         public string Server { get; private set; }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="NumericalMessage"/> class with the given line.
+        /// </summary>
+        /// <param name="line">The complete text of the Message.</param>
         public NumericalMessage(string line)
             : base(line)
         {
@@ -26,9 +39,14 @@ namespace Iris.Irc.Messages.Server
             Server = split[0].Remove(0, 1);
         }
 
+        /// <summary>
+        /// Checks if the given line has the correct format for this type of Message.
+        /// </summary>
+        /// <param name="line">The complete text of the Message.</param>
+        /// <returns>Whether it has the correct format for this type of Message.</returns>
         public static new bool IsCorrectFormat(string line)
         {
-            string[] split = line.Split();
+            var split = line.Split();
 
             if (split.Length < 2) return false;
 

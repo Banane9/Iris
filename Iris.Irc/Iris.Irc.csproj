@@ -34,7 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Messages\Client\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Channel.cs" />
@@ -42,18 +41,18 @@
     <Compile Include="ClientStateTracker.cs" />
     <Compile Include="IChat.cs" />
     <Compile Include="IConnection.cs" />
-    <Compile Include="ClientStringMessageType.cs" />
+    <Compile Include="Messages\Client\NamedMessageType.cs" />
     <Compile Include="ClientConfig.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="PrivateMessage.cs" />
+    <Compile Include="PrivateChat.cs" />
     <Compile Include="Messages\Server\JoinMessage.cs" />
-    <Compile Include="Messages\Server\Message.cs" />
+    <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\Server\NickMessage.cs" />
     <Compile Include="Messages\Server\Notice.cs" />
     <Compile Include="Messages\Server\NumericalMessage.cs" />
-    <Compile Include="NumericalMessageType.cs" />
+    <Compile Include="Messages\Server\NumericalMessageType.cs" />
     <Compile Include="ServerDetails.cs" />
-    <Compile Include="ServerStringMessageType.cs" />
+    <Compile Include="Messages\Server\NamedMessageType.cs" />
     <Compile Include="UserModes.cs" />
     <Compile Include="Messages\Server\PrivateMessage.cs" />
     <Compile Include="Messages\Server\PartMessage.cs" />

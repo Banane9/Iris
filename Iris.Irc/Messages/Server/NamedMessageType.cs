@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Iris.Irc
+namespace Iris.Irc.Messages.Server
 {
-    public static class ServerStringMessageType
+    public static class NamedMessageType
     {
         public const string Join = "JOIN";
         public const string Nickname = "NICK";

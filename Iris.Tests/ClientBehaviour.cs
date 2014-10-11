@@ -1,9 +1,9 @@
 ﻿using Iris.Irc;
+using Iris.Irc.Messages.Client;
 using Iris.Irc.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace Iris.Tests
@@ -14,17 +14,15 @@ namespace Iris.Tests
     [TestClass]
     public class ClientBehaviour
     {
-        private Queue<string> clientLines = new Queue<string>();
-        private Queue<string> serverLines = new Queue<string>();
-
-        private FakeConnection connection;
         private Client client;
+        private Queue<string> clientLines = new Queue<string>();
         private Thread clientThread;
-
+        private FakeConnection connection;
         private string nickname = "Iris";
-        private string username = "Iris";
-        private UserModes usermode = UserModes.i;
         private string password = "password";
+        private Queue<string> serverLines = new Queue<string>();
+        private UserModes usermode = UserModes.i;
+        private string username = "Iris";
 
         public ClientBehaviour()
         {
@@ -37,18 +35,18 @@ namespace Iris.Tests
             clientThread.Start((Action)(() => Thread.Sleep(100)));
         }
 
+        [TestMethod]
+        public void Login()
+        {
+            Assert.AreEqual<string>(NamedMessageType.Password + " " + password, clientLines.Dequeue());
+            Assert.AreEqual<string>(NamedMessageType.Nickname + " " + nickname, clientLines.Dequeue());
+            Assert.AreEqual<string>(NamedMessageType.User + " " + nickname + " " + (int)usermode + " * :" + username, clientLines.Dequeue());
+        }
+
         [TestCleanup()]
         public void MyTestCleanup()
         {
             client.Stop();
-        }
-
-        [TestMethod]
-        public void Login()
-        {
-            Assert.AreEqual<string>(ClientStringMessageType.Password + " " + password, clientLines.Dequeue());
-            Assert.AreEqual<string>(ClientStringMessageType.Nickname + " " + nickname, clientLines.Dequeue());
-            Assert.AreEqual<string>(ClientStringMessageType.User + " " + nickname + " " + (int)usermode + " * :" + username, clientLines.Dequeue());
         }
     }
 }

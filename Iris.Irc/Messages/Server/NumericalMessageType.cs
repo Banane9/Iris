@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Iris.Irc
+namespace Iris.Irc.Messages.Server
 {
     /// <summary>
     /// Lists all the numerical message types, as described here: http://tools.ietf.org/html/rfc1459#section-6 and here: http://tools.ietf.org/html/rfc2812#section-5.1
