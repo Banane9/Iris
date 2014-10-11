@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Iris.Irc.ServerMessages
+namespace Iris.Irc.Messages.Server
 {
     public class NickMessage : Message
     {
-        public string OldNick { get; private set; }
-
         public string NewNick { get; private set; }
 
-        public override MessageTypes Type
-        {
-            get { return MessageTypes.String; }
-        }
-
-        public static new bool IsCorrectFormat(string line)
-        {
-            string[] split = line.Split(' ');
-
-            return split.Length > 2 && split[1].ToUpper() == ServerStringMessageTypes.Nickname;
-        }
+        public string OldNick { get; private set; }
 
         public NickMessage(string line)
             : base(line)
@@ -31,11 +18,18 @@ namespace Iris.Irc.ServerMessages
             if (split.Length < 3)
                 throw new FormatException("Not enough parts in message.");
 
-            if (split[1].ToUpper() != ServerStringMessageTypes.Nickname)
+            if (!split[1].Equals(ServerStringMessageType.Nickname, StringComparison.OrdinalIgnoreCase))
                 throw new FormatException("Not a NICK message.");
 
             OldNick = split[0].Remove(0, 1);
             NewNick = split[2];
+        }
+
+        public static new bool IsCorrectFormat(string line)
+        {
+            string[] split = line.Split(' ');
+
+            return split.Length > 2 && split[1].Equals(ServerStringMessageType.Nickname, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

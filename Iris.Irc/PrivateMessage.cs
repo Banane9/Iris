@@ -1,9 +1,7 @@
-﻿using Iris.Irc.ServerMessages;
+﻿using Iris.Irc.Messages.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Iris.Irc
 {
@@ -13,17 +11,17 @@ namespace Iris.Irc
     public class PrivateChat : IChat
     {
         /// <summary>
+        /// Gets a List of messages that have been sent in the chat.
+        /// </summary>
+        public IList<Message> Messages { get; private set; }
+
+        /// <summary>
         /// Gets the Name of the chat. That is, where PRIVMSGs have to be send to.
         /// </summary>
         public string Name
         {
             get { return User.Nickname; }
         }
-
-        /// <summary>
-        /// Gets a List of messages that have been sent in the chat.
-        /// </summary>
-        public IList<Message> Messages { get; private set; }
 
         /// <summary>
         /// Gets the User that this private chat is with.

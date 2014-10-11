@@ -1,10 +1,7 @@
-﻿using Iris.Irc.ServerMessages;
+﻿using Iris.Irc.Messages.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Iris.Irc
 {
@@ -47,9 +44,9 @@ namespace Iris.Irc
 
             if (!running) return;
 
-            connection.SendLine(ClientStringMessageTypes.Password + " " + Config.Password);
-            connection.SendLine(ClientStringMessageTypes.Nickname + " " + Config.Nickname);
-            connection.SendLine(ClientStringMessageTypes.User + " " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
+            connection.SendLine(ClientStringMessageType.Password + " " + Config.Password);
+            connection.SendLine(ClientStringMessageType.Nickname + " " + Config.Nickname);
+            connection.SendLine(ClientStringMessageType.User + " " + Config.Nickname + " " + (int)Config.UserMode + " * :" + Config.Username);
 
             string line;
             while (running)
@@ -68,146 +65,21 @@ namespace Iris.Irc
         }
 
         /// <summary>
+        /// Sends a line through the connection.
+        /// </summary>
+        /// <param name="line">The line to be send.</param>
+        public void SendLine(string line)
+        {
+            connection.SendLine(line);
+        }
+
+        /// <summary>
         /// Stops the client.
         /// </summary>
         public void Stop()
         {
             running = false;
         }
-
-        /// <summary>
-        /// Dispatches the right events for the line.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        private void dispatchEventsFor(string line)
-        {
-            if (ServerMessages.Message.IsCorrectFormat(line))
-            {
-                onMessage(new ServerMessages.Message(line));
-
-                //Tryed to order them by how often they appear.
-                if (ServerMessages.PrivateMessage.IsCorrectFormat(line))
-                {
-                    onPrivateMessage(new ServerMessages.PrivateMessage(line));
-                }
-                else if (ServerMessages.NumericalMessage.IsCorrectFormat(line))
-                {
-                    onNumericalMessage(new ServerMessages.NumericalMessage(line));
-                }
-                else if (ServerMessages.Notice.IsCorrectFormat(line))
-                {
-                    onNotice(new ServerMessages.Notice(line));
-                }
-                else if (ServerMessages.NickMessage.IsCorrectFormat(line))
-                {
-                    onNickMessage(new ServerMessages.NickMessage(line));
-                }
-                else if (ServerMessages.JoinMessage.IsCorrectFormat(line))
-                {
-                    onJoinMessage(new ServerMessages.JoinMessage(line));
-                }
-                else if (ServerMessages.PartMessage.IsCorrectFormat(line))
-                {
-                    onPartMessage(new ServerMessages.PartMessage(line));
-                }
-                else if (ServerMessages.QuitMessage.IsCorrectFormat(line))
-                {
-                    onQuitMessage(new ServerMessages.QuitMessage(line));
-                }
-            }
-        }
-
-        public delegate void MessageEventHandler(Client sender, Message message);
-
-        /// <summary>
-        /// Fires for any message.
-        /// </summary>
-        public event MessageEventHandler Message;
-
-        /// <summary>
-        /// Fires the Message event.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        protected void onMessage(Message message)
-        {
-            if (Message != null)
-                Message(this, message);
-        }
-
-        public delegate void NoticeEventHandler(Client sender, Notice notice);
-
-        /// <summary>
-        /// Fires for NOTICEs.
-        /// </summary>
-        public event NoticeEventHandler Notice;
-
-        /// <summary>
-        /// Fires the Notice event.
-        /// </summary>
-        /// <param name="notice">The notice.</param>
-        protected void onNotice(Notice notice)
-        {
-            if (Notice != null)
-                Notice(this, notice);
-        }
-
-        public delegate void NumericalMessageEventHandler(Client sender, NumericalMessage numericalMessage);
-
-        /// <summary>
-        /// Fires for numerical messages.
-        /// </summary>
-        public event NumericalMessageEventHandler NumericalMessage;
-
-        /// <summary>
-        /// Fires the NumericalMessage event.
-        /// </summary>
-        /// <param name="numericalMessage">The numerical message.</param>
-        protected void onNumericalMessage(NumericalMessage numericalMessage)
-        {
-            if (NumericalMessage != null)
-                NumericalMessage(this, numericalMessage);
-        }
-
-        public delegate void PrivateMessageEventHandler(Client sender, PrivateMessage privateMessage);
-
-        /// <summary>
-        /// Fires for PRIVMSGs.
-        /// </summary>
-        public event PrivateMessageEventHandler PrivateMessage;
-
-        /// <summary>
-        /// Fires the PrivateMessage event.
-        /// </summary>
-        /// <param name="privateMessage">The private message.</param>
-        protected void onPrivateMessage(PrivateMessage privateMessage)
-        {
-            if (PrivateMessage != null)
-                PrivateMessage(this, privateMessage);
-        }
-
-        public delegate void NickMessageEventHandler(Client sender, NickMessage nickMessage);
-
-        /// <summary>
-        /// Fires for NICKs.
-        /// </summary>
-        public event NickMessageEventHandler NickMessage;
-
-        /// <summary>
-        /// Fires the NickMessage event.
-        /// </summary>
-        /// <param name="nickMessage">The nick message.</param>
-        protected void onNickMessage(NickMessage nickMessage)
-        {
-            if (NickMessage != null)
-                NickMessage(this, nickMessage);
-        }
-
-        public delegate void JoinMessageEventHandler(Client sender, JoinMessage joinMessage);
-
-        /// <summary>
-        /// Fires for JOINs.
-        /// </summary>
-        public event JoinMessageEventHandler JoinMessage;
 
         /// <summary>
         /// Fires the JoinMessage event.
@@ -219,12 +91,45 @@ namespace Iris.Irc
                 JoinMessage(this, joinMessage);
         }
 
-        public delegate void PartMessageEventHandler(Client sender, PartMessage partMessage);
+        /// <summary>
+        /// Fires the Message event.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        protected void onMessage(Message message)
+        {
+            if (Message != null)
+                Message(this, message);
+        }
 
         /// <summary>
-        /// Fires for PARTs.
+        /// Fires the NickMessage event.
         /// </summary>
-        public event PartMessageEventHandler PartMessage;
+        /// <param name="nickMessage">The nick message.</param>
+        protected void onNickMessage(NickMessage nickMessage)
+        {
+            if (NickMessage != null)
+                NickMessage(this, nickMessage);
+        }
+
+        /// <summary>
+        /// Fires the Notice event.
+        /// </summary>
+        /// <param name="notice">The notice.</param>
+        protected void onNotice(Notice notice)
+        {
+            if (Notice != null)
+                Notice(this, notice);
+        }
+
+        /// <summary>
+        /// Fires the NumericalMessage event.
+        /// </summary>
+        /// <param name="numericalMessage">The numerical message.</param>
+        protected void onNumericalMessage(NumericalMessage numericalMessage)
+        {
+            if (NumericalMessage != null)
+                NumericalMessage(this, numericalMessage);
+        }
 
         /// <summary>
         /// Fires the PartMessage event.
@@ -236,12 +141,15 @@ namespace Iris.Irc
                 PartMessage(this, partMessage);
         }
 
-        public delegate void QuitMessageEventHandler(Client sender, QuitMessage quitMessage);
-
         /// <summary>
-        /// Fires for QUITs.
+        /// Fires the PrivateMessage event.
         /// </summary>
-        public event QuitMessageEventHandler QuitMessage;
+        /// <param name="privateMessage">The private message.</param>
+        protected void onPrivateMessage(PrivateMessage privateMessage)
+        {
+            if (PrivateMessage != null)
+                PrivateMessage(this, privateMessage);
+        }
 
         /// <summary>
         /// Fires the QuitMessage event.
@@ -252,5 +160,107 @@ namespace Iris.Irc
             if (QuitMessage != null)
                 QuitMessage(this, quitMessage);
         }
+
+        /// <summary>
+        /// Dispatches the right events for the line.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        private void dispatchEventsFor(string line)
+        {
+            if (Messages.Server.Message.IsCorrectFormat(line))
+            {
+                //Tryed to order them by how often they appear.
+                if (Messages.Server.PrivateMessage.IsCorrectFormat(line))
+                {
+                    var privateMessage = new Messages.Server.PrivateMessage(line);
+                    onPrivateMessage(privateMessage);
+                    onMessage(privateMessage);
+                }
+                else if (Messages.Server.NumericalMessage.IsCorrectFormat(line))
+                {
+                    var numericalMessage = new Messages.Server.NumericalMessage(line);
+                    onNumericalMessage(numericalMessage);
+                    onMessage(numericalMessage);
+                }
+                else if (Messages.Server.Notice.IsCorrectFormat(line))
+                {
+                    var notice = new Messages.Server.Notice(line);
+                    onNotice(notice);
+                    onMessage(notice);
+                }
+                else if (Messages.Server.NickMessage.IsCorrectFormat(line))
+                {
+                    var nickMessage = new Messages.Server.NickMessage(line);
+                    onNickMessage(nickMessage);
+                    onMessage(nickMessage);
+                }
+                else if (Messages.Server.JoinMessage.IsCorrectFormat(line))
+                {
+                    var joinMessage = new Messages.Server.JoinMessage(line);
+                    onJoinMessage(joinMessage);
+                    onMessage(joinMessage);
+                }
+                else if (Messages.Server.PartMessage.IsCorrectFormat(line))
+                {
+                    var partMessage = new Messages.Server.PartMessage(line);
+                    onPartMessage(partMessage);
+                    onMessage(partMessage);
+                }
+                else if (Messages.Server.QuitMessage.IsCorrectFormat(line))
+                {
+                    var quitMessage = new Messages.Server.QuitMessage(line);
+                    onQuitMessage(quitMessage);
+                    onMessage(quitMessage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Event Handler for incoming Messages.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of message.</typeparam>
+        /// <param name="sender">The <see cref="Client"/> sending the Message.</param>
+        /// <param name="message">The incoming message.</param>
+        public delegate void MessageEventHandler<TMessage>(Client sender, TMessage message) where TMessage : Message;
+
+        /// <summary>
+        /// Fires for JOINs.
+        /// </summary>
+        public event MessageEventHandler<JoinMessage> JoinMessage;
+
+        /// <summary>
+        /// Fires for any message.
+        /// </summary>
+        public event MessageEventHandler<Message> Message;
+
+        /// <summary>
+        /// Fires for NICKs.
+        /// </summary>
+        public event MessageEventHandler<NickMessage> NickMessage;
+
+        /// <summary>
+        /// Fires for NOTICEs.
+        /// </summary>
+        public event MessageEventHandler<Notice> Notice;
+
+        /// <summary>
+        /// Fires for numerical messages.
+        /// </summary>
+        public event MessageEventHandler<NumericalMessage> NumericalMessage;
+
+        /// <summary>
+        /// Fires for PARTs.
+        /// </summary>
+        public event MessageEventHandler<PartMessage> PartMessage;
+
+        /// <summary>
+        /// Fires for PRIVMSGs.
+        /// </summary>
+        public event MessageEventHandler<PrivateMessage> PrivateMessage;
+
+        /// <summary>
+        /// Fires for QUITs.
+        /// </summary>
+        public event MessageEventHandler<QuitMessage> QuitMessage;
     }
 }

@@ -57,7 +57,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ClientBehaviour.cs" />
-    <Compile Include="MessageParsing.cs" />
+    <Compile Include="ServerMessageParsing.cs" />
+    <Compile Include="OtherParsing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

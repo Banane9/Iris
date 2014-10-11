@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="ClientMessages\" />
+    <Folder Include="Messages\Client\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Channel.cs" />
@@ -42,23 +42,22 @@
     <Compile Include="ClientStateTracker.cs" />
     <Compile Include="IChat.cs" />
     <Compile Include="IConnection.cs" />
-    <Compile Include="ClientStringMessageTypes.cs" />
+    <Compile Include="ClientStringMessageType.cs" />
     <Compile Include="ClientConfig.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="PrivateMessage.cs" />
-    <Compile Include="ServerMessages\JoinMessage.cs" />
-    <Compile Include="ServerMessages\Message.cs" />
-    <Compile Include="MessageTypes.cs" />
-    <Compile Include="ServerMessages\NickMessage.cs" />
-    <Compile Include="ServerMessages\Notice.cs" />
-    <Compile Include="ServerMessages\NumericalMessage.cs" />
-    <Compile Include="NumericalMessageTypes.cs" />
+    <Compile Include="Messages\Server\JoinMessage.cs" />
+    <Compile Include="Messages\Server\Message.cs" />
+    <Compile Include="Messages\Server\NickMessage.cs" />
+    <Compile Include="Messages\Server\Notice.cs" />
+    <Compile Include="Messages\Server\NumericalMessage.cs" />
+    <Compile Include="NumericalMessageType.cs" />
     <Compile Include="ServerDetails.cs" />
-    <Compile Include="ServerStringMessageTypes.cs" />
+    <Compile Include="ServerStringMessageType.cs" />
     <Compile Include="UserModes.cs" />
-    <Compile Include="ServerMessages\PrivateMessage.cs" />
-    <Compile Include="ServerMessages\PartMessage.cs" />
-    <Compile Include="ServerMessages\QuitMessage.cs" />
+    <Compile Include="Messages\Server\PrivateMessage.cs" />
+    <Compile Include="Messages\Server\PartMessage.cs" />
+    <Compile Include="Messages\Server\QuitMessage.cs" />
     <Compile Include="Testing\FakeConnection.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -46,9 +46,9 @@ namespace Iris.Tests
         [TestMethod]
         public void Login()
         {
-            Assert.AreEqual<string>(ClientStringMessageTypes.Password + " " + password, clientLines.Dequeue());
-            Assert.AreEqual<string>(ClientStringMessageTypes.Nickname + " " + nickname, clientLines.Dequeue());
-            Assert.AreEqual<string>(ClientStringMessageTypes.User + " " + nickname + " " + (int)usermode + " * :" + username, clientLines.Dequeue());
+            Assert.AreEqual<string>(ClientStringMessageType.Password + " " + password, clientLines.Dequeue());
+            Assert.AreEqual<string>(ClientStringMessageType.Nickname + " " + nickname, clientLines.Dequeue());
+            Assert.AreEqual<string>(ClientStringMessageType.User + " " + nickname + " " + (int)usermode + " * :" + username, clientLines.Dequeue());
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Iris.Irc
 {
@@ -10,43 +9,6 @@ namespace Iris.Irc
     /// </summary>
     public class User
     {
-        /// <summary>
-        /// Gets the Host of the User. nickname!username@host
-        /// </summary>
-        public string Host
-        {
-            get
-            {
-                return Complete.Remove(0, Complete.IndexOf('@') + 1);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the nickname of the User. nickname!username@host
-        /// </summary>
-        public string Nickname
-        {
-            get
-            {
-                return Complete.Remove(Complete.IndexOf('!'));
-            }
-            set
-            {
-                Complete = value + Complete.Remove(0, Complete.IndexOf('!'));
-            }
-        }
-
-        /// <summary>
-        /// Gets the username of the User. nickname!username@host
-        /// </summary>
-        public string Username
-        {
-            get
-            {
-                return Complete.Remove(Complete.IndexOf('@')).Remove(0, Complete.IndexOf('!') + 1);
-            }
-        }
-
         /// <summary>
         /// Gets or sets the complete identifier of the User. identifier = nickname!username@host
         /// </summary>
@@ -64,14 +26,25 @@ namespace Iris.Irc
         }
 
         /// <summary>
+        /// Gets the Host of the User. nickname!username@host
+        /// </summary>
+        public string Host
+        {
+            get
+            {
+                return Complete.Remove(0, Complete.IndexOf('@') + 1);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the User is identified with NickServ. Null if it wasn't requested yet.
+        /// </summary>
+        public bool? IsNickServIdentified { get; set; }
+
+        /// <summary>
         /// Gets or sets whether the User is online currently.
         /// </summary>
         public bool IsOnline { get; set; }
-
-        /// <summary>
-        /// Gets or sets wheter the User is identified with NickServ.
-        /// </summary>
-        public bool IsNickServIdentified { get; set; }
 
         /// <summary>
         /// Gets or sets the modes that the user has.
@@ -79,10 +52,44 @@ namespace Iris.Irc
         public UserModes Modes { get; set; }
 
         /// <summary>
+        /// Gets or sets the nickname of the User. nickname!username@host
+        /// </summary>
+        public string Nickname
+        {
+            get
+            {
+                return Complete.Remove(Complete.IndexOf('!'));
+            }
+            set
+            {
+                Complete = value + Complete.Remove(0, Complete.IndexOf('!'));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the DateTime at which the identification was requested from NickServ.
+        /// </summary>
+        public DateTime NickServIdentificationRequested { get; set; }
+
+        /// <summary>
+        /// Gets the username of the User. nickname!username@host
+        /// </summary>
+        public string Username
+        {
+            get
+            {
+                return Complete.Remove(Complete.IndexOf('@')).Remove(0, Complete.IndexOf('!') + 1);
+            }
+        }
+
+        /// <summary>
         /// Creates a new instance of the <see cref="Iris.Irc.User"/> class with the given complete identifier.
         /// </summary>
         /// <param name="complete">The complete identifier. nickname!username@host</param>
-        public User(string complete, bool isOnline = true, bool isNickServIdentified = false, UserModes userModes = 0)
+        /// <param name="isOnline">Whether the User is online at the moment.</param>
+        /// <param name="isNickServIdentified">Whether the User is identified with NickServ. Null if it wasn't requested yet.</param>
+        /// <param name="userModes">Current UserMode of the User.</param>
+        public User(string complete, bool isOnline = true, bool? isNickServIdentified = null, UserModes userModes = 0)
         {
             if (!(complete.Contains("!") && complete.Contains("@")))
                 throw new FormatException("Complete identifier doesn't have the correct format of nickname!username@host.");
@@ -91,6 +98,16 @@ namespace Iris.Irc
             IsOnline = isOnline;
             IsNickServIdentified = isNickServIdentified;
             Modes = userModes;
+        }
+
+        /// <summary>
+        /// Sends a authentication request for the current User to NickServ.
+        /// </summary>
+        /// <param name="client">The client used for sending the message.</param>
+        public void RequestNickServAuthentication(Client client)
+        {
+            NickServIdentificationRequested = DateTime.Now;
+            client.SendLine(ClientStringMessageType.Private + " NickServ :ACC " + Nickname);
         }
     }
 }

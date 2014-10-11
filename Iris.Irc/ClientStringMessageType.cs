@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Iris.Irc
 {
-    public static class ClientStringMessageTypes
+    public static class ClientStringMessageType
     {
         public const string Admin = "ADMIN";
         public const string Away = "AWAY";

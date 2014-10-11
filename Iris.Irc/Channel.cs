@@ -1,36 +1,23 @@
-﻿using Iris.Irc.ServerMessages;
+﻿using Iris.Irc.Messages.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Iris.Irc
 {
     /// <summary>
-    /// Represents a one-to-many chat with a channel.
+    /// Represents a one-to-many chat (channel).
     /// </summary>
     public class Channel : IChat
     {
-        /// <summary>
-        /// Gets the Name of the chat. That is, where PRIVMSGs have to be send to.
-        /// </summary>
-        public string Name { get; private set; }
+        public const string GlobalChannelPrefix = "#";
+
+        public const string LocalChannelPrefix = "&";
 
         /// <summary>
-        /// Gets a List of messages that have been sent in the chat.
+        /// Gets or sets the modes of the channel.
         /// </summary>
-        public IList<Message> Messages { get; private set; }
-
-        /// <summary>
-        /// Gets whether the channel is only on the server currently connected to ('&'), or network wide ('#').
-        /// </summary>
-        public bool IsLocal
-        {
-            get
-            {
-                return Name.StartsWith(LocalChannelPrefix.ToString());
-            }
-        }
+        public ChannelModes ChannelModes { get; set; }
 
         /// <summary>
         /// Gets whether the channel is network wide ('#'), or only on the server currently connected to ('&').
@@ -39,14 +26,30 @@ namespace Iris.Irc
         {
             get
             {
-                return Name.StartsWith(GlobalChannelPrefix.ToString());
+                return Name.StartsWith(GlobalChannelPrefix, StringComparison.OrdinalIgnoreCase);
             }
         }
 
         /// <summary>
-        /// Gets or sets the modes of the channel.
+        /// Gets whether the channel is only on the server currently connected to ('&'), or network wide ('#').
         /// </summary>
-        public ChannelModes ChannelModes { get; set; }
+        public bool IsLocal
+        {
+            get
+            {
+                return Name.StartsWith(LocalChannelPrefix, StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
+        /// <summary>
+        /// Gets a List of messages that have been sent in the chat.
+        /// </summary>
+        public IList<Message> Messages { get; private set; }
+
+        /// <summary>
+        /// Gets the Name of the chat. That is, where PRIVMSGs have to be send to.
+        /// </summary>
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets a List of Users in the Channel.
@@ -59,7 +62,7 @@ namespace Iris.Irc
         /// <param name="name">The channel's name.</param>
         public Channel(string name, ChannelModes channelModes = 0)
         {
-            if (!(name.StartsWith(LocalChannelPrefix.ToString()) || name.StartsWith(GlobalChannelPrefix.ToString())))
+            if (!IsChannel(name))
                 throw new FormatException("Channel must start with '" + LocalChannelPrefix + "' (local) or '" + GlobalChannelPrefix + "' (network wide).");
 
             Name = name;
@@ -69,7 +72,9 @@ namespace Iris.Irc
             Users = new List<User>();
         }
 
-        public const char LocalChannelPrefix = '&';
-        public const char GlobalChannelPrefix = '#';
+        public static bool IsChannel(string identifier)
+        {
+            return identifier.StartsWith(LocalChannelPrefix, StringComparison.OrdinalIgnoreCase) || identifier.StartsWith(GlobalChannelPrefix, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }
