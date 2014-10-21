@@ -7,7 +7,7 @@ namespace Iris.Irc.Messages.Server
     /// <summary>
     /// Represents a PRIVMSG message that a Client receives from the Server.
     /// </summary>
-    public class PrivateMessage : Message
+    public sealed class PrivateMessage : Message
     {
         /// <summary>
         /// Gets the actual content of the message.
@@ -34,10 +34,10 @@ namespace Iris.Irc.Messages.Server
             var split = line.Split(' ');
 
             if (split.Length < 4)
-                throw new FormatException("Not enough parts in message.");
+                throw new MessageFormatException("Not enough parts in message.");
 
             if (!split[1].Equals(NamedMessageType.Private, StringComparison.OrdinalIgnoreCase))
-                throw new FormatException("Not a " + NamedMessageType.Private + " message.");
+                throw new MessageTypeException("Not a " + NamedMessageType.Private + " message.");
 
             User = split[0].Remove(0, 1);
             Recipient = split[2];

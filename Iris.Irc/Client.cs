@@ -7,7 +7,7 @@ using System.Linq;
 namespace Iris.Irc
 {
     /// <summary>
-    /// The client that takes an <see cref="Iris.Irc.IConnection"/> and splits up the incoming messages.
+    /// The client that takes an <see cref="IConnection"/> and splits up the incoming messages.
     /// </summary>
     public class Client
     {
@@ -24,7 +24,7 @@ namespace Iris.Irc
         public ClientConfig Config { get; set; }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Iris.Irc.Client"/> class.
+        /// Creates a new instance of the <see cref="Client"/> class.
         /// </summary>
         /// <param name="connection">Connection to the IRC Server.</param>
         /// <param name="config"></param>
@@ -35,12 +35,14 @@ namespace Iris.Irc
         }
 
         /// <summary>
-        /// Run the client. Should be started in its own <see cref="System.Threading.Thread"/>.
+        /// Run the client. Should be started in its own <see cref="Thread"/>.
         /// Delay function has to be passed in because the Portable Class Library doesn't support the Thread class.
         /// </summary>
         /// <param name="delay">Function that gets called to let the Thread sleep when there's no new lines to process.</param>
         public void Run(Action delay)
         {
+            if (running) return;
+
             running = connection.Open();
 
             if (!running) return;
@@ -53,11 +55,8 @@ namespace Iris.Irc
             while (running)
             {
                 if (connection.TryGetNextLine(out line))
-                {
                     dispatchEventsFor(line);
-                }
-
-                if (!connection.HasMoreLines)
+                else
                     delay();
             }
 

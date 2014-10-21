@@ -29,11 +29,11 @@ namespace Iris.Irc.Messages.Server
             string[] split = line.Split(' ');
 
             if (split.Length < 2)
-                throw new FormatException("Not enough parts in message.");
+                throw new MessageFormatException("Not enough parts in message.");
 
             NumericalMessageType numericalType;
             if (!Enum.TryParse<NumericalMessageType>(split[1], out numericalType))
-                throw new FormatException("Not a valid number for a numerical message.");
+                throw new MessageTypeException(split[1], "any correct numerical");
 
             NumericalType = numericalType;
             Server = split[0].Remove(0, 1);

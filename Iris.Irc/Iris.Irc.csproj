@@ -37,13 +37,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Channel.cs" />
-    <Compile Include="ChannelModes.cs" />
     <Compile Include="ClientStateTracker.cs" />
     <Compile Include="IChat.cs" />
     <Compile Include="IConnection.cs" />
+    <Compile Include="Messages\Client\JoinMessage.cs" />
     <Compile Include="Messages\Client\NamedMessageType.cs" />
     <Compile Include="ClientConfig.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Messages\Client\NickMessage.cs" />
+    <Compile Include="Messages\Client\PasswordMessage.cs" />
+    <Compile Include="Messages\MessageFormatException.cs" />
+    <Compile Include="Messages\MessageTypeException.cs" />
     <Compile Include="PrivateChat.cs" />
     <Compile Include="Messages\Server\JoinMessage.cs" />
     <Compile Include="Messages\Message.cs" />

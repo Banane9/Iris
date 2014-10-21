@@ -7,7 +7,7 @@ namespace Iris.Irc.Messages.Server
     /// <summary>
     /// Represents a NICK message that a Client receives from the Server.
     /// </summary>
-    public class NickMessage : Message
+    public sealed class NickMessage : Message
     {
         public string NewNick { get; private set; }
 
@@ -23,10 +23,10 @@ namespace Iris.Irc.Messages.Server
             var split = line.Split(' ');
 
             if (split.Length < 3)
-                throw new FormatException("Not enough parts in message.");
+                throw new MessageFormatException("Not enough parts in message.");
 
             if (!split[1].Equals(NamedMessageType.Nickname, StringComparison.OrdinalIgnoreCase))
-                throw new FormatException("Not a " + NamedMessageType.Nickname + " message.");
+                throw new MessageTypeException(split[1], NamedMessageType.Nickname);
 
             OldNick = split[0].Remove(0, 1);
             NewNick = split[2];

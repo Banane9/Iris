@@ -7,7 +7,7 @@ namespace Iris.Irc.Messages.Server
     /// <summary>
     /// Represents a PART message that a Client receives from the Server.
     /// </summary>
-    public class PartMessage : Message
+    public sealed class PartMessage : Message
     {
         /// <summary>
         /// The identifier of the channel that the User left.
@@ -29,10 +29,10 @@ namespace Iris.Irc.Messages.Server
             var split = line.Split(' ');
 
             if (split.Length < 3)
-                throw new FormatException("Not enough parts in message.");
+                throw new MessageFormatException("Not enough parts in message.");
 
             if (!split[1].Equals(NamedMessageType.Part, StringComparison.OrdinalIgnoreCase))
-                throw new FormatException("Not a " + NamedMessageType.Part + " message.");
+                throw new MessageTypeException(split[1], NamedMessageType.Part);
 
             User = split[0].Remove(0, 1);
             Channel = split[2];

@@ -7,7 +7,7 @@ namespace Iris.Irc.Messages.Server
     /// <summary>
     /// Represents a QUIT message that a Client receives from the Server.
     /// </summary>
-    public class QuitMessage : Message
+    public sealed class QuitMessage : Message
     {
         /// <summary>
         /// Gets the quit message.
@@ -29,10 +29,10 @@ namespace Iris.Irc.Messages.Server
             var split = line.Split(' ');
 
             if (split.Length < 3)
-                throw new FormatException("Not enough parts in message.");
+                throw new MessageFormatException("Not enough parts in message.");
 
             if (!split[1].Equals(NamedMessageType.Quit, StringComparison.OrdinalIgnoreCase))
-                throw new FormatException("Not a " + NamedMessageType.Quit + " message.");
+                throw new MessageTypeException("Not a " + NamedMessageType.Quit + " message.");
 
             User = split[0].Remove(0, 1);
             Message = string.Join(" ", split.Skip(2)).Remove(0, 1);

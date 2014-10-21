@@ -7,7 +7,7 @@ namespace Iris.Irc.Messages.Server
     /// <summary>
     /// Represents a NOTICE that a Client receives from the Server.
     /// </summary>
-    public class Notice : Message
+    public sealed class Notice : Message
     {
         /// <summary>
         /// Gets the actual content of the Notice.
@@ -34,10 +34,10 @@ namespace Iris.Irc.Messages.Server
             string[] split = line.Split(' ');
 
             if (split.Length < 4)
-                throw new FormatException("Not enough parts in message.");
+                throw new MessageFormatException("Not enough parts in message.");
 
             if (!split[1].Equals(NamedMessageType.Notice, StringComparison.OrdinalIgnoreCase))
-                throw new FormatException("Not a " + NamedMessageType.Notice + ".");
+                throw new MessageTypeException(split[1], NamedMessageType.Notice);
 
             User = split[0].Remove(0, 1);
             Recipient = split[2];

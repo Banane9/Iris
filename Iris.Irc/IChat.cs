@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace Iris.Irc
 {
+    /// <summary>
+    /// Defines Properties for Chats.
+    /// </summary>
     public interface IChat
     {
         /// <summary>
